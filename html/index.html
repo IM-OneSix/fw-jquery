@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fw-jquery</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../app/lib/underscore-min.js"></script>
+	<script src="../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+	<link href="../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+	<link href="../app/common/common.css" rel="stylesheet">
+</head>
+
+<body>
+	<!-- view-top -->
+	<div id="view-top">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" onclick="showModal()">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">Home</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="#">메뉴1</a></li>
+						<li><a href="#">메뉴2</a></li>
+						<li><a href="#">메뉴3</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+	<!-- view-content -->
+	<div id="view-content" class="container sample">
+		<div class="page-header">
+			<h3>화면 제어</h3>
+		</div>
+		<!-- text -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+				text <span class="label label-default">data-bind-text</span>
+				html <span class="label label-default">data-bind-html</span>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<p>
+				<button class="btn btn-default">text</button>
+				<button class="btn btn-default">html</button>
+				</p>
+			</div>
+		</div>
+		<!-- visibled -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+				visibled <span class="label label-default">data-bind-visibled</span>
+				if <span class="label label-default">data-bind-if</span>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="active"><a href="#">tab01</a></li>
+					<li role="presentation"><a href="#">tab02</a></li>
+				</ul>
+				<div style="padding:20px 10px 5px 10px">
+					<p><b>백엔드에서 프론트엔드로 전환</b><br/>최근 몇년간, 웹앱의 업무 로직이 백엔드에서 프론트엔드로 이동하는 경향이 있으며, 백엔드는 단순한 API 를 위한 용도로 전환되고 있다. 이로써, 프론트엔드 프레임워크가 좀 더 중요해진다.</p>
+
+					<p><b>Things 만들기</b><br/>라즈베리파이 재단은 올해(2015) 이른 크리스마스 선물로, 충분히 빠르고 효율적이면서 $5 인 Raspberry PI Zero 를 발표했다. 리눅스로 동작하기 때문에 서버로 사용할수도 있고, 스마트 거울과 같은 홈 자동화 장치를 만드는 데에도 사용할 수 있으며, 단순한 장비에 장착하여 당신이 꿈꾸기만 했던 "인터넷 가능한 커피 머신"을 만들수도 있다. 2016년은 라즈베리를 사용해볼 때다.</p>
+				</div>
+			</div>
+		</div>
+		<!-- each -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">each <span class="label label-default">data-bind-each</span></h3>
+			</div>
+			<div class="panel-body">
+				<button class="btn btn-default">추가</button>
+				<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>column01</th>
+						<th>column02</th>
+						<th>column03</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>a1</td>
+						<td>b1</td>
+						<td>c1</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>a2</td>
+						<td>b2</td>
+						<td>c2</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>a3</td>
+						<td>b3</td>
+						<td>c3</td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- include -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">include <span class="label label-default">data-bind-include</span></h3>
+			</div>
+			<div class="panel-body">
+				data-view-include
+			</div>
+		</div>
+
+
+		<div class="page-header">
+			<h3>form 컨트롤 제어</h3>
+		</div>
+		<!-- edit box -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">edit box <span class="label label-default">data-bind-value</span></h3>
+			</div>
+			<div class="panel-body">
+				<p><div class="form-inline">
+					<div class="form-group">
+						<input type="text" id="ctrl-text" class="form-control">
+						<button class="btn btn-primary">set</button>
+						<button class="btn btn-info">get</button>
+					</div>
+				</div></p>
+				<div class="alert alert-info">
+					<div><b>result:</b> <span></span></div>
+				</div>
+			</div>
+		</div>
+		<!-- radio button -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">radio button <span class="label label-default">data-bind-value</span></h3>
+			</div>
+			<div class="panel-body">
+				<p><div class="form-inline">
+					<div class="form-group">
+						<label><input type="radio" name="ctrl-radio" id="ctrl-radio01" value="r01"> radio01</label>
+						<label><input type="radio" name="ctrl-radio" id="ctrl-radio02" value="r02"> radio02</label>
+						<label><input type="radio" name="ctrl-radio" id="ctrl-radio03" value="r03"> radio03</label>
+					</div>
+					<button class="btn btn-primary">set</button>
+					<button class="btn btn-info">get</button>
+				</div></p>
+				<div class="alert alert-info">
+					<div><b>result:</b> <span></span></div>
+				</div>
+			</div>
+		</div>
+		<!-- checkbox -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">check button <span class="label label-default">data-bind-value</span></h3>
+			</div>
+			<div class="panel-body">
+				<p><div class="form-inline">
+					<div class="form-group">
+						<label><input type="checkbox" name="ctrl-checkbox" id="ctrl-checkbox01" value="c01"> checkbox01</label>
+						<label><input type="checkbox" name="ctrl-checkbox" id="ctrl-checkbox02" value="c02"> checkbox02</label>
+						<label><input type="checkbox" name="ctrl-checkbox" id="ctrl-checkbox03" value="c03"> checkbox03</label>
+					</div>
+					<button class="btn btn-primary">set</button>
+					<button class="btn btn-info">get</button>
+				</div></p>
+				<div class="alert alert-info">
+					<div><b>result:</b> <span></span></div>
+				</div>
+			</div>
+		</div>
+		<!-- select -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">select box <span class="label label-default">data-bind-value</span></h3>
+			</div>
+			<div class="panel-body">
+				<p><div class="form-inline">
+					<select class="form-control" id="ctrl-select">
+						<option value="s01">option01</option>
+						<option value="s02">option02</option>
+						<option value="s03">option03</option>
+					</select>
+					<button class="btn btn-primary">set</button>
+					<button class="btn btn-info">get</button>
+				</div></p>
+				<div class="alert alert-info">
+					<div><b>result:</b> <span></span></div>
+				</div>
+			</div>
+		</div>
+		<!-- textarea -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">textarea <span class="label label-default">data-bind-value</span></h3>
+			</div>
+			<div class="panel-body">
+				<p><div class="form-inline">
+					<div class="form-group">
+						<textarea class="form-control"></textarea>
+						<button class="btn btn-primary">set</button>
+						<button class="btn btn-info">get</button>
+					</div>
+				</div></p>
+				<div class="alert alert-info">
+					<div><b>result:</b> <span></span></div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="page-header">
+			<h3>이벤트</h3>
+		</div>
+		<!-- click -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">click <span class="label label-default">data-bind-click</span></h3>
+			</div>
+			<div class="panel-body">
+				<p>
+				<button class="btn btn-default">확 인</button>
+				</p>
+			</div>
+		</div>
+		<!-- change -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">change <span class="label label-default">data-bind-change</span></h3>
+			</div>
+			<div class="panel-body">
+				<p>
+				<select class="form-control" id="ctrl-select">
+					<option value="s01">option01</option>
+					<option value="s02">option02</option>
+					<option value="s03">option03</option>
+				</select>
+				</p>
+			</div>
+		</div>
+		<!-- focus -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">focus <span class="label label-default">data-bind-focus</span></h3>
+			</div>
+			<div class="panel-body">
+				<p>
+				<input type="text" class="form-control">
+				</p>
+			</div>
+		</div>
+		<!-- blur -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">blur <span class="label label-default">data-bind-blur</span></h3>
+			</div>
+			<div class="panel-body">
+				<p>
+				<input type="text" class="form-control">
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- view-bottom -->
+	<footer id="view-bottom" class="bs-docs-footer label-danger">
+		<div class="container">
+			레이아웃 하단영역
+		</div>
+	</footer>
+
+	<!-- Modal-dialog -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="list-group">
+						<a href="#" class="list-group-item active">메뉴1</a>
+						<a href="#" class="list-group-item">메뉴2</a>
+						<a href="#" class="list-group-item">메뉴3</a>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+	function showModal() {
+		$('#myModal').modal('show');
+	}
+
+	$('#myModal').on('hidden.bs.modal', function (e) {
+		console.log(e);
+	});
+</script>
+
+</body>
+</html>
