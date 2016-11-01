@@ -68,6 +68,10 @@ _w.service('io', function($svc) {
 	return {
 		push: function($vo) {
 			var vi= $('[data-bind-view='+$vo.$name+']')[0];
+			// if
+			// visible
+			// each
+
 			// text
 			_.each($(vi).find('[data-bind-text]'), function(v) {
 				$(v).text(eval('$vo.'+$(v).data('bindText')));
