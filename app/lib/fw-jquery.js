@@ -7,27 +7,22 @@
 			return b=='I'?(m?['I',v,m]:['I',7,7]):[b,99,99];
 		}()
 	};
-	var _view={};
+	var _controller={};
 	var _service={};
 
-	_w.main= function(fn) {
+	_w.main= function(f) {
 		$(document).ready(function() {
+			_.each(['controller', 'service'],function(v){delete _w[v]});
 			if($('[data-bind-view=main]').length < 1) {
 				alert('main이 존재하지 않습니다.');
 				return;
 			}
-			_w.view('main', fn);
-			_.each(['controller', 'service'],function(v){delete _w[v]});
-
-			loadView('main');
+			addController('main', f);
+			loadController('main');
 		});
 	};
-	_w.view= function(name, fn) {
-		_view[name]={
-			controller: fn,
-			model: {$name:name}
-		};
-		$log.out('view', _view);
+	_w.controller= function(n,f) {
+		addController(n,f);
 	};
 	_w.service= function(name, fn) {
 		_service[name]=fn;
@@ -39,19 +34,82 @@
 			get: function(name) {return _service[name](svc())}
 		}
 	}
-	function loadView(name) {
-		// $(element).off('keydown.SIE#Pw keyup.SIE#Pw').on('keydown.SIE#Pw keyup.SIE#Pw',function(e){
-		// 	var v=valueAccessor();
-		// 	var keyCode = e.keyCode || e.which;
-		// 	if(typeof v==='function'){
-		// 		v($(e.target).val());
-		// 	}
-		// });
-
-		$($('[data-bind-view='+name+']')[0]).click(function(e) {
-			$(e.target).data('bindClick') && eval('_view.'+name+'.model.'+$(e.target).data('bindClick'));
+	function addController(n, f) {
+		if(_controller[n]) {
+			alert(n+': 컨트롤러가 중복됩니다.');
+			return;
+		}
+		_controller[n] = {
+			func: f,
+			vo: {},
+			bindIf: {},
+			bindEach: {}
+		};
+		$log.out('addController', _controller);
+	}
+	function loadController(n) {
+		// event
+		$($('[data-bind-view='+n+']')[0]).click(function(e) {
+			if($(e.target).data('bindClick')) {
+				(function($vo){eval('$vo.'+$(e.target).data('bindClick'))})(_controller[n]['vo']);
+				updateData(n);
+			}
+			return false;
 		});
-		_view[name]['controller'](_view[name]['model'], svc());
+		// element-if, each
+		_.each($('[data-bind-view='+n+'] [data-bind-if]'), function(v,k) {
+			_controller[n]['bindIf'][k]=$(v).html(), $(v).html('');
+		});
+		_.each($('[data-bind-view='+n+'] [data-bind-each]'), function(v,k) {
+			_controller[n]['bindEach'][k]=$(v).html(), $(v).html('');
+		});
+
+		$log.out('loadController', _controller);
+
+		_controller[n]['func'](_controller[n]['vo'], svc()), updateData(n);
+	}
+	function updateData(n) {
+		// if
+		_.each($('[data-bind-view='+n+'] [data-bind-if]'), function(v,k) {
+			(function($vo,a){
+				(a==true || eval('$vo.'+a)) ? $(v).html(_controller[n]['bindIf'][k]):$(v).html('')
+			})(_controller[n]['vo'], $(v).data('bindIf'));
+		});
+		// each
+		_.each($('[data-bind-view='+n+'] [data-bind-each]'), function(v,k) {
+			$(v).html('');
+			(function($vo,a){
+				_.each(eval('$vo.'+a), function(v2,k2) {
+					$(v).append(_controller[n]['bindEach'][k].replace(/\$data/g, a+'['+k2+']').replace(/\$index/g, k2));
+				});
+			})(_controller[n]['vo'], $(v).data('bindEach'));
+		});
+		// visibled
+		_.each($('[data-bind-view='+n+'] [data-bind-visible]'), function(v) {
+			(function($vo,a){
+				(a==true || eval('$vo.'+a))?$(v).show():$(v).hide()
+			})(_controller[n]['vo'], $(v).data('bindVisible'));
+		});
+		// class
+		_.each($('[data-bind-view='+n+'] [data-bind-class]'), function(v) {
+			_.each($(v).data('bindClass').split(','), function(v2) {
+				(function($vo,a){
+					(a[1]=='true' || eval('$vo.'+a[1]))?$(v).addClass(a[0]):$(v).removeClass(a[0])
+				})(_controller[n]['vo'], v2.split(':'));
+			});
+		});
+		// text
+		_.each($('[data-bind-view='+n+'] [data-bind-text]'), function(v) {
+			(function($vo,a){
+				$(v).text(eval('$vo.'+a))
+			})(_controller[n]['vo'], $(v).data('bindText'));
+		});
+		// html
+		_.each($('[data-bind-view='+n+'] [data-bind-html]'), function(v) {
+			(function($vo,a){
+				$(v).html(eval('$vo.'+a))
+			})(_controller[n]['vo'], $(v).data('bindHtml'));
+		});
 	}
 
 	w._w=_w;
@@ -66,21 +124,9 @@
 
 _w.service('io', function($svc) {
 	return {
+		// pull
+		// push
 		push: function($vo) {
-			var vi= $('[data-bind-view='+$vo.$name+']')[0];
-			// if
-			// visible
-			// each
-
-			// text
-			_.each($(vi).find('[data-bind-text]'), function(v) {
-				$(v).text(eval('$vo.'+$(v).data('bindText')));
-			});
-			// html
-			_.each($(vi).find('[data-bind-html]'), function(v) {
-				$(v).html(eval('$vo.'+$(v).data('bindHtml')));
-			});
-			// value
 		}
 	}
 });
