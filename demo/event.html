@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fw-jquery</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../app/lib/underscore-min.js"></script>
+	<script src="../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+	<link href="../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+	<script src="../app/lib/jquery-fw.js"></script>
+	<link href="../app/common/common.css" rel="stylesheet">
+	<script type="text/javascript">
+
+(function(){
+root.main(function($vo, $svc) {
+	$vo.aa = function() {
+		alert('eventSample');
+	};
+
+	init();
+	function init() {
+		root.loadView(['eventSample2']);
+	}
+});
+
+root.controller('eventSample2', function($vo, $svc) {
+	$vo.aa = function() {
+		alert('eventSample2');
+	};
+	$vo.change = function() {
+		alert('change eventSample2');
+	};
+
+	init();
+	function init() {
+		$log('init');
+	}
+});
+})();
+	</script>
+</head>
+
+<body>
+	<div style="position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:.5;display:none;"></div>
+
+	<!-- view-top -->
+	<div id="view-top">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" onclick="showModal()">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Home</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="#">메뉴1</a></li>
+						<li><a href="#">메뉴2</a></li>
+						<li><a href="#">메뉴3</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+	<!-- view-content -->
+	<div id="view-content" class="container">
+		<div class="page-header">
+			<h3>이벤트</h3>
+		</div>
+		<!-- click -->
+		<div class="panel panel-default" data-bind-view="main">
+			<div class="panel-heading">
+				<h3 class="panel-title">click <span class="label label-default">data-bind-click</span></h3>
+			</div>
+			<div class="panel-body">
+				<p>
+				<button class="btn btn-default" data-bind-click="aa()">확 인</button>
+				</p>
+			</div>
+		</div>
+
+		<div class="panel panel-default" data-bind-view="eventSample2">
+			<div class="panel-heading">
+				<h3 class="panel-title">click <span class="label label-default">data-bind-click</span></h3>
+			</div>
+			<div class="panel-body">
+				<a href="#" data-bind-click="aa()">aaaaa</a><br/>
+				<select class="form-control" data-bind-change="change()">
+					<option value="01">value 01</option>
+					<option value="02">value 02</option>
+					<option value="03">value 03</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<!-- view-bottom -->
+	<footer id="view-bottom" class="bs-docs-footer label-danger">
+		<div class="container">
+			레이아웃 하단영역
+		</div>
+	</footer>
+
+	<div data-bind-lpopup="lpopup01" style="position:absolute;top:10%;width:300px;height:200px;display:none;">
+		<div class="well">
+			<button type="button" class="close"><span>×</span></button>
+			<h4>title</h4>
+			<p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
+		</div>
+	</div>
+
+</body>
+	
+</html>
