@@ -19,8 +19,9 @@
 root.main(function($vo, $svc) {
 	$vo.io={};
 	$vo.io.text = '<strong>text</strong>';
-	$vo.aa = function() {
-		alert('eventSample');
+	$vo.io.html = '<strong>text</strong>';
+	$vo.text = function() {
+		$vo.io.text='click text';
 	};
 
 	init();
@@ -73,14 +74,14 @@ root.main(function($vo, $svc) {
 			</div>
 			<div class="panel-body">
 				<p>
-				<button class="btn btn-default">text</button>
+				<button class="btn btn-default" data-bind-click="text()">text</button>
 				<button class="btn btn-default">html</button>
 				</p>
 
 				<div class="alert alert-info">
 					<strong>result</strong>
 					<p data-bind-text="io.text"></p>
-					<p data-bind-html="io.text"></p>
+					<p data-bind-html="io.html"></p>
 				</div>
 			</div>
 		</div>

@@ -21,13 +21,13 @@
 			$('[data-bind-view]').on('click', function(e) {
 				return (function(c,t){
 					var $vo=_controller[c]['vo'];
-					t && eval('$vo.'+t);
+					t && (eval('$vo.'+t),updateData(c));
 					return !t;
 				})($(e.currentTarget).data('bindView'), $(e.target).data('bindClick'));
 			}).on('change', function(e) {
 				(function(c,t){
 					var $vo=_controller[c]['vo'];
-					t && eval('$vo.'+t);
+					t && (eval('$vo.'+t),updateData(c));
 				})($(e.currentTarget).data('bindView'), $(e.target).data('bindChange'));
 			});
 
