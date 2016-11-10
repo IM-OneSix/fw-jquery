@@ -1,86 +1,106 @@
-(function(w) {
-	var _w={
-		browser: function() {
-			var m=document.documentMode,a=navigator.userAgent,
-			b=_.find({'Chrome/':'C','Safari/':'S','Firefox/':'F','OPR':'O','Opera':'O','Trident/':'I','MSIE':'I'},function(x,y){return a.indexOf(y)>-1})||'N',
-			v=_.find({'Trident/4.0':8,'Trident/5.0':9,'Trident/6.0':10,'Trident/7.0':11},function(x,y){return a.indexOf(y)>-1})||7;
-			return b=='I'?(m?['I',v,m]:['I',7,7]):[b,99,99];
-		}()
+(function(root) {
+	var j$ = function(obj) {
+		if (obj instanceof j$) return obj;
+		if (!(this instanceof j$)) return new j$(obj);
+		this._wrapped = obj;
 	};
-	var _controller={};
-	var _service={};
+	if (typeof exports !== 'undefined') {
+		if (typeof module !== 'undefined' && module.exports) {
+			exports = module.exports = j$;
+		}
+		exports.j$ = j$;
+	}
+	else {
+		root.j$ = j$;
+	}
 
-	_w.main= function(f) {
+	_.templateSettings = {evaluate:/\{\{(.+?)\}\}/g,interpolate: /\{\{=(.+?)\}\}/g, escape: /\{\{-(.+?)\}\}/g};
+	var controller={}, service={};
+	j$.browser = function() {
+		var m=document.documentMode,a=navigator.userAgent,
+		b=_.find({'Chrome/':'C','Safari/':'S','Firefox/':'F','OPR':'O','Opera':'O','Trident/':'I','MSIE':'I'},function(x,y){return a.indexOf(y)>-1})||'N',
+		v=_.find({'Trident/4.0':8,'Trident/5.0':9,'Trident/6.0':10,'Trident/7.0':11},function(x,y){return a.indexOf(y)>-1})||7;
+		return b=='I'?(m?['I',v,m]:['I',7,7]):[b,99,99];
+	}();
+	j$.main = function(func){
+		delete j$.main;
+
 		$(document).ready(function() {
-			_.each(['controller', 'service'],function(v){delete _w[v]});
 			if($('[data-bind-view=main]').length < 1) {
-				alert('main이 존재하지 않습니다.');
-				return;
+				error('main이 존재하지 않습니다.');return;
 			}
 
+			_.each(['controller', 'service'],function(v){delete j$[v]});
 			$('[data-bind-view]').on('click', function(e) {
-				return (function(c,t){
-					var $vo=_controller[c]['vo'];
-					t && (eval('$vo.'+t),updateData(c));
-					return !t;
-				})($(e.currentTarget).data('bindView'), $(e.target).data('bindClick'));
+				return execute($(e.currentTarget).data('bindView'), $(e.target).data('bindClick'));
 			}).on('change', function(e) {
-				(function(c,t){
-					var $vo=_controller[c]['vo'];
-					t && (eval('$vo.'+t),updateData(c));
-				})($(e.currentTarget).data('bindView'), $(e.target).data('bindChange'));
+				return execute($(e.currentTarget).data('bindView'), $(e.target).data('bindChange'));
 			});
 
-			addController('main', f);
+			addController('main', func);
 			loadController('main');
 		});
-	};
-	_w.loadView= function(n) {
-		_.isArray(n) && _.each(n, function(v){loadController(n);});
-	};
-
-	_w.controller= function(n,f) {
-		addController(n,f);
-	};
-	function loadController(n) {
-		var func=_controller[n]['func'], vo=_controller[n]['vo'];
-		// bindIf
-		// bindEach
-		func(vo), updateData(n);
-		// _controller[n]['func'](_controller[n]['vo'], svc()), updateData(n);
-	}
-	function addController(n, f) {
-		if(_controller[n]) {
-			alert(n+': 컨트롤러가 중복됩니다.');
-			return;
+		function execute(name,target) {
+			if(!target)return!0;
+			var e=$vo=controller[name]['vo'],
+			f=function(s){return s.length<2 ? null : [s[0].split('.'),s[1].split(')')[0].split(',')]}(target.split('('));
+			_.each(f[0],function(v){e[v]&&(e=e[v])}), _.isFunction(e)?e.apply($vo,f[1]):error('undefined function', '$vo.'+f[0]);
+			return!1;
 		}
-		_controller[n] = {
-			func: f,
+	};
+	// j$.loadView 화면 출력 후 컨트롤러 로드
+	// j$.closeView 화면 히든 또는 삭제 후 컨트롤러 삭제
+	// j$.moveView 호출한 컨트롤러 히든 또는 삭제, 화면 출력 후 컨트롤러 로드
+	j$.controller = addController;
+	j$.service = function(name, func) {
+		if(service[name]) {
+			error('서비스 중복: ', name);return;
+		}
+		service[name]=func;
+	};
+	function addController(name, func) {
+		if(controller[name]) {
+			error('컨트롤러 중복: ', name);return;
+		}
+		controller[name] = {
+			bind: func,
 			vo: {},
-			bindIf: {},
-			bindEach: {}
+			tIf: {},
+			tEach: {}
 		};
 	}
-	function updateData(n) {
-		var $view = $($('[data-bind-view='+n+']')[0]);
-		// text
-		_.each($view.find('[data-bind-text]'), function(v) {
-			(function($vo,t){
-				t.text(eval('$vo.'+t.data('bindText')))
-			})(_controller[n]['vo'], $(v));
-		});
-		// html
-		_.each($view.find('[data-bind-html]'), function(v) {
-			(function($vo,t){
-				t.html(eval('$vo.'+t.data('bindHtml')))
-			})(_controller[n]['vo'], $(v));
-		});
+	function loadController(name) {
+		// element-if, each
+		// data-bind-link: 바인딩 참조된 객체 이름
+		// _.each($('[data-bind-view='+n+'] [data-bind-if]'), function(v,k) {
+		// 	_controller[n]['bindIf'][k]=$(v).html(), $(v).html('');
+		// });
+		// _.each($('[data-bind-view='+n+'] [data-bind-each]'), function(v,k) {
+		// 	_controller[n]['bindEach'][k]=$(v).html(), $(v).html('');
+		// });
+		var con = controller[name];
+		con['bind'](con['vo'], svc());//, updateData(n);
 	}
 
-	w.root=_w;
-	w.$log=function() {
-		w.console || {log:function(){}};
-		var a = _.toArray(arguments);
-		(function(ie){ie&&console.log(JSON.stringify(a)),!ie&&console.log.apply(w, a)})('I'==_w.browser[0])
+
+
+	function svc() {
+		return {
+			get: function(name) {return service[name](svc())}
+		}
+	}
+	service.log=function(){
+		return {
+			group:function(b){'I'!=j$.browser[0] && b && console.group(b)},
+			groupEnd:function(){'I'!=j$.browser[0] && console.groupEnd()}
+		}
 	};
+
+	root.$log=function() {
+		'I'==j$.browser[0]?console.log(JSON.stringify(_.toArray(arguments))):console.log.apply(root, _.toArray(arguments));
+	};
+	function error() {
+		'I'==j$.browser[0]?console.log('error', JSON.stringify(_.toArray(arguments))):console.error.apply(root, _.toArray(arguments));
+	}
 })(window);
+
