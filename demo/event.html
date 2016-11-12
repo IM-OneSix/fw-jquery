@@ -17,23 +17,16 @@
 
 (function(){
 j$.main(function($vo, $svc) {
-	$vo.aa=function() {
-		$log(_.template("Using 'with': {{= a.answer }}")({a:{answer: 'no'}}));
+	$vo.on={};
+	$vo.on.click=function() {
+		$log(_.template("Using 'with': {{= $data.a.answer }}")({a:{answer: 'no'}}));
+	};
+	$vo.on.change=function() {
+		$log(_.template("Using 'with': {{= $data.a.answer }}")({a:{answer: 'no'}}));
+	};
+	init();
+	function init(){
 	}
-});
-
-j$.controller('eventSample2', function($vo, $svc) {
-// 	$vo.aa = function() {
-// 		alert('eventSample2');
-// 	};
-// 	$vo.change = function() {
-// 		alert('change eventSample2');
-// 	};
-
-// 	init();
-// 	function init() {
-// 		$log('init');
-// 	}
 });
 })();
 	</script>
@@ -67,39 +60,51 @@ j$.controller('eventSample2', function($vo, $svc) {
 	</div>
 
 	<!-- view-content -->
-	<div id="view-content" class="container">
+	<div id="view-content" class="container" data-bind-view="main">
 		<div class="page-header">
 			<h3>이벤트</h3>
 		</div>
 		<!-- click -->
-		<div class="panel panel-default" data-bind-view="main">
+		<div class="panel panel-default">
 			<div class="panel-heading"><h3 class="panel-title">click 이벤트</h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <span class="label label-default">data-bind-click</span>
 <pre><strong>Example</strong>
-<span>Sample text here...</span>
+&lt;a href="#" data-bind-click="click()"&gt;클릭&lt;/a&gt;<br/>
+// script
+j$.main(functoin($vo,$svc) {
+	$vo.click=function() {
+		alert('click');
+	};
+});
 </pre>
-					<button class="btn btn-default" data-bind-click="aa2(1,'2')">확 인</button>
-				</p>
-				<p>
-					<a href="#" data-bind-click="aa()">확 인</a>
-					<div id="testEach"></div>
+					<button class="btn btn-default" data-bind-click="on.click()">확 인</button>
+					<a href="#" data-bind-click="on.click()"><strong>확 인</strong></a>
 				</p>
 			</div>
 		</div>
 
-		<div class="panel panel-default" data-bind-view="eventSample2">
-			<div class="panel-heading">
-				<h3 class="panel-title">click <span class="label label-default">data-bind-click</span></h3>
-			</div>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">change 이벤트</h3></div>
 			<div class="panel-body">
-				<a href="#" data-bind-click="aa()">aaaaa</a><br/>
-				<select class="form-control" data-bind-change="change()">
+				<p>
+					에트리뷰트: <span class="label label-default">data-bind-change</span>
+<pre><strong>Example</strong>
+&lt;select data-bind-change="change()"&gt; &lt;/select&gt;<br/>
+// script
+j$.main(functoin($vo,$svc) {
+	$vo.change=function() {
+		alert('change');
+	};
+});
+</pre>
+				<select class="form-control" data-bind-change="on.change()">
 					<option value="01">value 01</option>
 					<option value="02">value 02</option>
 					<option value="03">value 03</option>
 				</select>
+				</p>
 			</div>
 		</div>
 	</div>
