@@ -29,8 +29,8 @@
 			addController('main', func);
 			loadController('main');
 		});
-	};
-	j$.controller = addController;
+	},
+	j$.controller = addController,
 	j$.service = function(name, func) {
 		if(service[name]) {
 			error('서비스 중복: ', name);return;
@@ -59,11 +59,15 @@
 		var $c=controller[name];
 		var $bind=$c['$bind'],$vo=$c['$vo'],$each=$c['$each'];
 
+		// 템플릿 저장
+		// if
+
+		// each
 		_.each($('[data-bind-view='+name+'] [data-bind-each]'), function(v,k) {
 			var h=$(v).html();
 			_.each($(v).find('[data-bind-click]'), function(a){
 				$(a).attr('data-bind-item', $(v).data('bindEach')+',{{=$index}}');
-			});
+			}),
 			_.each($(v).find('[data-bind-change]'), function(a){
 				$(a).attr('data-bind-item', $(v).data('bindEach')+',{{=$index}}');
 			});
@@ -74,18 +78,24 @@
 	function wacth(name) {
 		var $c=controller[name];
 
-// attr
-// class
-		_.each($('[data-bind-view='+name+'] [data-bind-text]'), function(v) {
+		// visible
+		_.each($('[data-bind-view='+name+'] [data-bind-visible]'), function(v,k) {
 			(function(a){
-				$(v).text(eval('$c.$vo.'+a))
-			})($(v).data('bindText'))
+				if(a=='true') return $(v).show();
+				var sh=eval('$c.$vo.'+a);
+				(sh==true||sh=='true') ? $(v).show():$(v).hide();
+			})($(v).data('bindVisible'))
 		});
-		_.each($('[data-bind-view='+name+'] [data-bind-html]'), function(v) {
+		// class
+		_.each($('[data-bind-view='+name+'] [data-bind-class]'), function(v,k) {
 			(function(a){
-				$(v).html(eval('$c.$vo.'+a))
-			})($(v).data('bindHtml'))
+				_.each(a.replace(/vl/g,'$c.$vo.vl').split(','), function(v1){
+					var t=v1.split(':');
+					eval(t[1])?$(v).addClass(t[0]):$(v).removeClass(t[0]);
+				});
+			})($(v).data('bindClass'))
 		});
+		// each
 		_.each($('[data-bind-view='+name+'] [data-bind-each]'), function(v) {
 			root.$index=0,root.$data={};
 			(function(a){
@@ -102,13 +112,25 @@
 			})($(v).data('bindEach'))
 			delete root.$index, delete root.$data;
 		});
-		_.each($('[data-bind-view='+name+'] [data-bind-visible]'), function(v,k) {
+		// attribute
+		_.each($('[data-bind-view='+name+'] [data-bind-attr]'), function(v) {
 			(function(a){
-				if(a=='true') return $(v).show();
-				var vl=(eval('$c.$vo.'+a)+'')!='false';
-				a.indexOf('==')>0 && (vl=eval('$c.$vo.'+a.split('==')[0])==a.split('==')[1].replace(/'/g,''));
-				vl ? $(v).show():$(v).hide();
-			})($(v).data('bindVisible'))
+				_.each(eval('$c.$vo.'+a),function(t,a) {
+					$(v).attr(a,t)
+				})
+			})($(v).data('bindAttr'))
+		});
+		// text
+		_.each($('[data-bind-view='+name+'] [data-bind-text]'), function(v) {
+			(function(a){
+				$(v).text(eval('$c.$vo.'+a))
+			})($(v).data('bindText'))
+		});
+		// html
+		_.each($('[data-bind-view='+name+'] [data-bind-html]'), function(v) {
+			(function(a){
+				$(v).html(eval('$c.$vo.'+a))
+			})($(v).data('bindHtml'))
 		});
 
 		// 이벤트 바인딩
@@ -126,7 +148,7 @@
 
 			// 함수부, 파라메터부 파싱
 			(function(s){
-				s.length<2 ? null : (func=s[0].split('.'), arg=s[1].split(')')[0].split(','))
+				s.length<2 ? null : (func=s[0].split('.'), arg=s[1].split(')')[0].replace(/'/g,'').split(','))
 			})(target.split('('));
 
 			// 함수 선언여부 체크

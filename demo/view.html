@@ -26,6 +26,8 @@ j$.main(function($vo, $svc) {
 		{c1:'b1',c2:'b2',c3:'b3'},
 		{c1:'c1',c2:'c2',c3:'c3'}
 	];
+	$vo.vl.outAttr={};
+	$vo.vl.tab='a';
 
 	$vo.on.chgText=function(){
 		$vo.vl.outText='text out';
@@ -42,6 +44,12 @@ j$.main(function($vo, $svc) {
 	$vo.on.chgVisible=function(a,b){
 		$vo.vl.outVisible=a;
 		$vo.vl.outText=b;
+	};
+	$vo.on.chgAttr=function(){
+		$vo.vl.outAttr={id:'abcd',class:'btn btn-default'};
+	};
+	$vo.on.chgTab=function(t){
+		$vo.vl.tab=t;
 	};
 	init();
 	function init(){
@@ -188,6 +196,51 @@ j$.main(functoin($vo,$svc) {
 						<button type="button" class="btn btn-warning">Warning</button>
 						<button type="button" class="btn btn-danger">Danger</button>
 					</div>
+				</p>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">attribute 바인딩</h3></div>
+			<div class="panel-body">
+				<p>
+					에트리뷰트: <code>data-bind-attr</code>
+<pre><strong>Example</strong>
+&lt;span data-bind-attr="outAttr"&gt;<strong>button</strong>&lt;/span&gt;<br/>
+// script
+j$.main(functoin($vo,$svc) {
+	$vo.outAttr='{id:'abcd', calss:'btn btn-default'}';
+});
+</pre>
+					<a href="#" data-bind-click="on.chgAttr()"><strong>확 인</strong></a>
+					<div>
+						<a href="#" data-bind-attr="vl.outAttr">버 튼</a>
+					</div>
+				</p>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">class 바인딩</h3></div>
+			<div class="panel-body">
+				<p>
+					에트리뷰트: <code>data-bind-class</code>
+<pre><strong>Example</strong>
+&lt;button class="btn" data-bind-class="btn-primary:outClass=='a'"&gt;<strong>test</strong>&lt;/button&gt;<br/>
+// script
+j$.main(functoin($vo,$svc) {
+	$vo.outClass='a';
+});
+</pre>
+					<button class="btn btn-primary">버튼 1</button>
+					<button class="btn btn-default">버튼 2</button>
+
+<ul class="nav nav-tabs">
+<li role="presentation" data-bind-class="active:vl.tab=='a',on:vl.tab==1"><a href="#" data-bind-click="on.chgTab('a')">Home</a></li>
+<li role="presentation" data-bind-class="active:vl.tab=='b'"><a href="#" data-bind-click="on.chgTab('b')">Profile</a></li>
+<li role="presentation" data-bind-class="active:vl.tab=='c'"><a href="#" data-bind-click="on.chgTab('c')">Messages</a></li>
+</ul>
+
 				</p>
 			</div>
 		</div>
