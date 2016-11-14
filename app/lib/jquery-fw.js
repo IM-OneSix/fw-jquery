@@ -1,37 +1,37 @@
 (function(root) {
-	var j$ = function(obj) {
-		if (obj instanceof j$) return obj;
-		if (!(this instanceof j$)) return new j$(obj);
+	var k$ = function(obj) {
+		if (obj instanceof k$) return obj;
+		if (!(this instanceof k$)) return new k$(obj);
 		this._wrapped = obj;
 	};
 	if (typeof exports !== 'undefined') {
 		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = j$;
+			exports = module.exports = k$;
 		}
-		exports.j$ = j$;
+		exports.k$ = k$;
 	}
 	else {
-		root.j$ = j$;
+		root.k$ = k$;
 	}
 
 	_.templateSettings = {evaluate:/\{\{(.+?)\}\}/g,interpolate: /\{\{=(.+?)\}\}/g, escape: /\{\{-(.+?)\}\}/g};//, variable:'$data'
 	var controller={}, service={};
-	j$.debug=true,
-	j$.browser = function() {
+	k$.debug=true,
+	k$.browser = function() {
 		var m=document.documentMode,a=navigator.userAgent,
 		b=_.find({'Chrome/':'C','Safari/':'S','Firefox/':'F','OPR':'O','Opera':'O','Trident/':'I','MSIE':'I'},function(x,y){return a.indexOf(y)>-1})||'N',
 		v=_.find({'Trident/4.0':8,'Trident/5.0':9,'Trident/6.0':10,'Trident/7.0':11},function(x,y){return a.indexOf(y)>-1})||7;
 		return b=='I'?(m?['I',v,m]:['I',7,7]):[b,99,99];
 	}();
-	j$.main = function(func){
+	k$.main = function(func){
 		$(document).ready(function() {
-			_.each(['main','controller', 'service'],function(v){delete j$[v]});
+			_.each(['main','controller', 'service'],function(v){delete k$[v]});
 			addController('main', func);
 			loadController('main');
 		});
 	},
-	j$.controller = addController,
-	j$.service = function(name, func) {
+	k$.controller = addController,
+	k$.service = function(name, func) {
 		if(service[name]) {
 			error('서비스 중복: ', name);return;
 		}
@@ -171,18 +171,62 @@
 
 	// 서비스 구현
 	// ==================================================
-	// j$.loadView 화면 출력 후 컨트롤러 로드
-	// j$.closeView 화면 히든 또는 삭제 후 컨트롤러 삭제
-	// j$.moveView 호출한 컨트롤러 히든 또는 삭제, 화면 출력 후 컨트롤러 로드
+	// k$.loadView 화면 출력 후 컨트롤러 로드
+	// k$.closeView 화면 히든 또는 삭제 후 컨트롤러 삭제
+	// k$.moveView 호출한 컨트롤러 히든 또는 삭제, 화면 출력 후 컨트롤러 로드
 	service.log=function(){
 		return {
-			group:function(b){'I'!=j$.browser[0] && b && console.group(b)},
-			groupEnd:function(){'I'!=j$.browser[0] && console.groupEnd()}
+			group:function(b){'I'!=k$.browser[0] && b && console.group(b)},
+			groupEnd:function(){'I'!=k$.browser[0] && console.groupEnd()}
+		}
+	};
+	service.form=function(){
+		return {
+			pull:function(name){
+				name = name||'main';
+				if(!controller[name]) error('undefined controller: '+name);
+
+				var $c=controller[name];
+				_.each($('[data-bind-view='+name+'] [data-bind-value]'), function(v) {
+					(function(a,b){
+						var gt=Function('a','return $vo.'+a+';')(a);
+						var st=Function('v','$vo.'+a+'=v;')();
+						var $vo=$c['$vo'];
+						var vl2= Function('a','$log($vo.'+a+');');
+						var v13=Function('a','return $vo.'+a+';')(a);
+						// v12.call(this,a);
+						$log(a,b,gt,vl2,v13);
+						vl2.call(this,a);
+						// edit box
+						if(b=='text') {
+							!_.isUndefined(Function('a','return $vo.'+a+';')(a))&&Function('v','$vo.'+a+'=v;')($(v).val());
+							// $log(vl, $vo);
+							// eval('$vo.'+a+'="'+vl+'"');
+						}
+					})($(v).data('bindValue'), $(v).attr('type'))
+				});
+			},
+			push:function(name){
+				name = name||'main';
+				var $c=controller[name] && controller[name];
+				$log(name, $vo);
+				_.each($('[data-bind-view='+name+'] [data-bind-value]'), function(v) {
+					(function(a,b){
+						var vl=eval('$vo.'+a);
+						// edit box
+						if(b=='text') {
+							vl&&$(v).val(vl);
+						}
+						else if(b=='radio'){
+						}
+					})($(v).data('bindValue'), $(v).attr('type'))
+				});
+			}
 		}
 	};
 
 	root.$log=function() {
-		j$.debug && ('I'==j$.browser[0]?console.log(JSON.stringify(_.toArray(arguments))):console.log.apply(root, _.toArray(arguments)));
+		k$.debug && ('I'==k$.browser[0]?console.log(JSON.stringify(_.toArray(arguments))):console.log.apply(root, _.toArray(arguments)));
 	};
 	function error(msg) {throw new Error(msg)}
 })(window);

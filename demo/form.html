@@ -14,19 +14,21 @@
 	<script src="../app/lib/jquery-fw.js"></script>
 	<link href="../app/common/common.css" rel="stylesheet">
 	<script type="text/javascript">
-
 (function(){
 k$.main(function($vo, $svc) {
-	$vo.on={};
-	$vo.on.click=function() {
-		$log('click event');
+	var frm=$svc.get('form');
+	$vo.pushText='push text';
+	$vo.pullText='';
+
+	$vo.pull={};
+	$vo.pull.text='';
+
+	$vo.clickPush=function() {
+		frm.push();
 	};
-	$vo.on.change=function() {
-		$log('change event');
+	$vo.clickPull=function() {
+		frm.pull();
 	};
-	init();
-	function init(){
-	}
 });
 })();
 	</script>
@@ -50,9 +52,9 @@ k$.main(function($vo, $svc) {
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">이벤트</a></li>
+						<li><a href="event.html">이벤트</a></li>
 						<li><a href="view.html">화면제어</a></li>
-						<li><a href="form.html">폼제어</a></li>
+						<li class="active"><a href="#">폼제어</a></li>
 					</ul>
 				</div>
 			</div>
@@ -62,51 +64,74 @@ k$.main(function($vo, $svc) {
 	<!-- view-content -->
 	<div id="view-content" class="container" data-bind-view="main">
 		<div class="page-header">
-			<h3>이벤트</h3>
+			<h3>Form 바이딩</h3>
 		</div>
-		<!-- click -->
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">click 이벤트</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">form 서비스</h3></div>
 			<div class="panel-body">
 				<p>
-					에트리뷰트: <code>data-bind-click</code>
-<pre><strong>Example</strong>
-&lt;a href="#" data-bind-click="click()"&gt;클릭&lt;/a&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.click=function() {
-		alert('click');
-	};
-});
-</pre>
-					<button class="btn btn-default" data-bind-click="on.click()">확 인</button>
-					<a href="#" data-bind-click="on.click()"><strong>확 인</strong></a>
+					설명: 'form' 서비스 객체를 할당 받아 사용.<br/>
+					에트리뷰트: <code>data-bind-value</code><br/>
+					함수: <br/>
+					<span class="label label-info">pull</span> 화면으로 부터 변수에 값을 받아 오기, 파라메터: 컨트롤러명<br/>
+					<span class="label label-info">push</span> 변수의 값을 화면으로 출력, 파라메터: 컨트롤러명<br/>
 				</p>
 			</div>
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">change 이벤트</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">push 함수</h3></div>
 			<div class="panel-body">
 				<p>
-					에트리뷰트: <code>data-bind-change</code>
+					파라메터: <strong>controller</strong>-컨트롤러명 (메인콘트롤러인경우 생략가능)<br/>
 <pre><strong>Example</strong>
-&lt;select data-bind-change="change()"&gt; &lt;/select&gt;<br/>
+&lt;input type="text" data-bind-value="text" /&gt;<br/>
 // script
 k$.main(functoin($vo,$svc) {
-	$vo.change=function() {
-		alert('change');
-	};
+	var frm = $svc.get('form');
+
+	$vo.text = 'text';
+	frm.push('main');
 });
 </pre>
-				<select class="form-control" data-bind-change="on.change()">
-					<option value="01">value 01</option>
-					<option value="02">value 02</option>
-					<option value="03">value 03</option>
-				</select>
+					<div class="form-group">
+						<button class="btn btn-primary" data-bind-click="clickPush()">push</button>
+					</div>
+					<div class="form-inline">
+						<span data-bind-text="pushText"></span>
+						<input type="text" class="form-control" data-bind-value="pushText" />
+					</div>
 				</p>
 			</div>
 		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">push 함수</h3></div>
+			<div class="panel-body">
+				<p>
+					파라메터: <strong>controller</strong>-컨트롤러명 (메인콘트롤러인경우 생략가능)<br/>
+<pre><strong>Example</strong>
+&lt;input type="text" data-bind-value="text" /&gt;<br/>
+// script
+k$.main(functoin($vo,$svc) {
+	var frm = $svc.get('form');
+
+	$vo.text = 'text';
+	frm.push('main');
+});
+</pre>
+					<div class="form-group">
+						<button class="btn btn-primary" data-bind-click="clickPull()">pull</button>
+					</div>
+					<div class="form-inline">
+						<input type="text" class="form-control" value="pull text" data-bind-value="pull.text" />
+						<span data-bind-text="pull.text"></span>
+					</div>
+				</p>
+			</div>
+		</div>
+
+
 	</div>
 
 	<!-- view-bottom -->

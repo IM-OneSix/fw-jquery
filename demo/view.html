@@ -15,7 +15,7 @@
 	<link href="../app/common/common.css" rel="stylesheet">
 	<script type="text/javascript">
 (function(){
-j$.main(function($vo, $svc) {
+k$.main(function($vo, $svc) {
 	$vo.vl={};
 	$vo.on={};
 	$vo.vl.outText='';
@@ -77,9 +77,9 @@ j$.main(function($vo, $svc) {
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="#">메뉴1</a></li>
-						<li><a href="#">메뉴2</a></li>
-						<li><a href="#">메뉴3</a></li>
+						<li><a href="event.html">이벤트</a></li>
+						<li class="active"><a href="#">화면제어</a></li>
+						<li><a href="form.html">폼제어</a></li>
 					</ul>
 				</div>
 			</div>
@@ -99,7 +99,7 @@ j$.main(function($vo, $svc) {
 <pre><strong>Example</strong>
 &lt;span data-bind-text="outText"&gt;test&lt;/span&gt;<br/>
 // script
-j$.main(functoin($vo,$svc) {
+k$.main(functoin($vo,$svc) {
 	$vo.outText='test';
 });
 </pre>
@@ -117,7 +117,7 @@ j$.main(functoin($vo,$svc) {
 <pre><strong>Example</strong>
 &lt;span data-bind-html="htmltOut"&gt;<strong>test</strong>&lt;/span&gt;<br/>
 // script
-j$.main(functoin($vo,$svc) {
+k$.main(functoin($vo,$svc) {
 	$vo.outHtml='&lt;strong&gt;test&lt;/strong&gt;';
 });
 </pre>
@@ -143,7 +143,7 @@ j$.main(functoin($vo,$svc) {
 &lt;/tbody&gt;
 &lt;/table&gt;<br/>
 // script
-j$.main(functoin($vo,$svc) {
+k$.main(functoin($vo,$svc) {
 	$vo.outHtml=[
 		{c1:'a1',c2:'a2',c3:'a3'},
 		{c1:'b1',c2:'b2',c3:'b3'},
@@ -174,7 +174,7 @@ j$.main(functoin($vo,$svc) {
 <pre><strong>Example</strong>
 &lt;span data-bind-visible="vl.outVisible"&gt;<strong>test</strong>&lt;/span&gt;<br/>
 // script
-j$.main(functoin($vo,$svc) {
+k$.main(functoin($vo,$svc) {
 	$vo.outVisible=true;
 });
 </pre>
@@ -208,7 +208,7 @@ j$.main(functoin($vo,$svc) {
 <pre><strong>Example</strong>
 &lt;span data-bind-attr="outAttr"&gt;<strong>button</strong>&lt;/span&gt;<br/>
 // script
-j$.main(functoin($vo,$svc) {
+k$.main(functoin($vo,$svc) {
 	$vo.outAttr='{id:'abcd', calss:'btn btn-default'}';
 });
 </pre>
@@ -228,19 +228,15 @@ j$.main(functoin($vo,$svc) {
 <pre><strong>Example</strong>
 &lt;button class="btn" data-bind-class="btn-primary:outClass=='a'"&gt;<strong>test</strong>&lt;/button&gt;<br/>
 // script
-j$.main(functoin($vo,$svc) {
+k$.main(functoin($vo,$svc) {
 	$vo.outClass='a';
 });
 </pre>
-					<button class="btn btn-primary">버튼 1</button>
-					<button class="btn btn-default">버튼 2</button>
-
-<ul class="nav nav-tabs">
-<li role="presentation" data-bind-class="active:vl.tab=='a',on:vl.tab==1"><a href="#" data-bind-click="on.chgTab('a')">Home</a></li>
-<li role="presentation" data-bind-class="active:vl.tab=='b'"><a href="#" data-bind-click="on.chgTab('b')">Profile</a></li>
-<li role="presentation" data-bind-class="active:vl.tab=='c'"><a href="#" data-bind-click="on.chgTab('c')">Messages</a></li>
-</ul>
-
+					<ul class="nav nav-tabs">
+						<li role="presentation" data-bind-class="active:vl.tab=='a',on:vl.tab==1"><a href="#" data-bind-click="on.chgTab('a')">Home</a></li>
+						<li role="presentation" data-bind-class="active:vl.tab=='b'"><a href="#" data-bind-click="on.chgTab('b')">Profile</a></li>
+						<li role="presentation" data-bind-class="active:vl.tab=='c'"><a href="#" data-bind-click="on.chgTab('c')">Messages</a></li>
+					</ul>
 				</p>
 			</div>
 		</div>
