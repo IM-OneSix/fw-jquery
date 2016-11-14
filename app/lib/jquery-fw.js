@@ -33,12 +33,12 @@
 	k$.controller = addController,
 	k$.service = function(name, func) {
 		if(service[name]) {
-			error('서비스 중복: ', name);return;
+			error('duplicated service name: ', name);return;
 		}
 		service[name]=func;
 	};
 	function addController(name, func) {
-		controller[name] && error('컨트롤러 중복 선언: '+name);
+		controller[name] && error('duplicated controller name: '+name);
 		controller[name] = {
 			$bind: func,
 			$vo: {},
@@ -47,14 +47,8 @@
 		};
 	}
 	function loadController(name) {
-		$('[data-bind-view='+name+']').length < 1 && (delete controller[name],error('뷰 엘리먼트 미존재: '+name));
-		$('[data-bind-view='+name+']').length > 1 && (delete controller[name],error('뷰 엘리먼트 중복: '+name));
-
-		// element-if, each
-		// data-bind-link: 바인딩 참조된 객체 이름
-		// _.each($('[data-bind-view='+n+'] [data-bind-if]'), function(v,k) {
-		// 	_controller[n]['bindIf'][k]=$(v).html(), $(v).html('');
-		// });
+		$('[data-bind-view='+name+']').length < 1 && (delete controller[name],error('bind-view: not found name: '+name));
+		$('[data-bind-view='+name+']').length > 1 && (delete controller[name],error('bind-view: duplicated name: '+name));
 
 		var $c=controller[name];
 		var $bind=$c['$bind'],$vo=$c['$vo'],$each=$c['$each'];
@@ -95,73 +89,56 @@
 				});
 			})($(v).data('bindClass'))
 		});
-		// each
-		_.each($('[data-bind-view='+name+'] [data-bind-each]'), function(v) {
-			root.$index=0,root.$data={};
-			(function(a){
-				var tx='',
-				tp=eval('$c.$each[\''+a+'\']'),
-				dt=eval('$c.$vo.'+a);
 
-				_.each(dt, function(d,i){
-					root.$index=i,
-					root.$data=d,
-					tx+=tp(d);
-				}),
-				$(v).html(tx);
-			})($(v).data('bindEach'))
-			delete root.$index, delete root.$data;
-		});
+
 		// attribute
 		_.each($('[data-bind-view='+name+'] [data-bind-attr]'), function(v) {
 			(function(a){
-				_.each(eval('$c.$vo.'+a),function(t,a) {
+				_.each(c$vo({n:name,t:a}),function(t,a) {
 					$(v).attr(a,t)
 				})
 			})($(v).data('bindAttr'))
 		});
 		// text
 		_.each($('[data-bind-view='+name+'] [data-bind-text]'), function(v) {
-			(function(a){
-				$(v).text(eval('$c.$vo.'+a))
+			(function(target){
+				_.isUndefined(c$vo({n:name,t:target})) ?  error('bind-text: undefined: '+target) : $(v).text(c$vo({n:name,t:target}));
 			})($(v).data('bindText'))
 		});
 		// html
 		_.each($('[data-bind-view='+name+'] [data-bind-html]'), function(v) {
-			(function(a){
-				$(v).html(eval('$c.$vo.'+a))
+			(function(target){
+				_.isUndefined(c$vo({n:name,t:target})) ?  error('bind-html: undefined: '+target) : $(v).html(c$vo({n:name,t:target}));
 			})($(v).data('bindHtml'))
+		});
+		// each
+		_.each($('[data-bind-view='+name+'] [data-bind-each]'), function(v) {
+			root.$index=0,root.$data={};
+			(function(a){
+				var tx='',
+				tp=controller[name]['$each'][a],
+				dt=c$vo({n:name,t:a});
+
+				_.each(dt, function(d,i){
+					root.$index=i,
+					root.$data=d,
+					tx+=tp(d);
+				}),
+
+				$(v).html(tx);
+			})($(v).data('bindEach'))
+			delete root.$index, delete root.$data;
 		});
 
 		// 이벤트 바인딩
 		$('[data-bind-view='+name+'] [data-bind-click]').off('click').on('click', function(e){
-			return execute(name, $(e.currentTarget).data('bindClick'), $(e.currentTarget).data('bindItem'));
+			c$exec({n:name,t:$(e.currentTarget).data('bindClick'),v:$(e.currentTarget).data('bindItem')}), wacth(name);
+			return !$(e.currentTarget).data('bindClick');
 		});
 		$('[data-bind-view='+name+'] [data-bind-change]').off('change').on('change', function(e){
-			return execute(name, $(e.currentTarget).data('bindChange'), $(e.currentTarget).data('bindItem'));
+			c$exec({n:name,t:$(e.currentTarget).data('bindChange'),v:$(e.currentTarget).data('bindItem')}), wacth(name);
+			return !$(e.currentTarget).data('bindChange');
 		});
-		function execute(name,target,item) {
-			if(!target)return!0;
-
-			var $c=controller[name], func='', arg='';
-			var e=$vo=$c['$vo'];
-
-			// 함수부, 파라메터부 파싱
-			(function(s){
-				s.length<2 ? null : (func=s[0].split('.'), arg=s[1].split(')')[0].replace(/'/g,'').split(','))
-			})(target.split('('));
-
-			// 함수 선언여부 체크
-			_.each(func,function(v){e[v]&&(e=e[v])});
-			!_.isFunction(e) && error('undefined function: $vo.'+func.join('.'));
-
-			// 함수 호출시 넘겨줄 데이타 파싱
-			var i = item&&item.split(',');
-			_.isArray(i) && ($vo=eval('$c.$vo.'+i[0])[i[1]]);
-
-			e.apply($vo,arg),wacth(name);
-			return!1;
-		}
 	}
 	function svc() {
 		return {
@@ -185,39 +162,23 @@
 			pull:function(name){
 				name = name||'main';
 				if(!controller[name]) error('undefined controller: '+name);
-
-				var $c=controller[name];
+	
 				_.each($('[data-bind-view='+name+'] [data-bind-value]'), function(v) {
-					(function(a,b){
-						var gt=Function('a','return $vo.'+a+';')(a);
-						var st=Function('v','$vo.'+a+'=v;')();
-						var $vo=$c['$vo'];
-						var vl2= Function('a','$log($vo.'+a+');');
-						var v13=Function('a','return $vo.'+a+';')(a);
-						// v12.call(this,a);
-						$log(a,b,gt,vl2,v13);
-						vl2.call(this,a);
+					(function(target,type){
 						// edit box
-						if(b=='text') {
-							!_.isUndefined(Function('a','return $vo.'+a+';')(a))&&Function('v','$vo.'+a+'=v;')($(v).val());
-							// $log(vl, $vo);
-							// eval('$vo.'+a+'="'+vl+'"');
-						}
-					})($(v).data('bindValue'), $(v).attr('type'))
+						if(type=='text') _.isUndefined(c$vo({n:name,t:target})) ? error('bind-value: undefined: '+target) : c$vo({n:name,t:target,v:$(v).val()});
+					})($(v).data('bindValue'), $(v).attr('type'));
 				});
 			},
 			push:function(name){
 				name = name||'main';
-				var $c=controller[name] && controller[name];
-				$log(name, $vo);
+				if(!controller[name]) error('undefined controller: '+name);
+
 				_.each($('[data-bind-view='+name+'] [data-bind-value]'), function(v) {
-					(function(a,b){
-						var vl=eval('$vo.'+a);
+					(function(target,type){
 						// edit box
-						if(b=='text') {
-							vl&&$(v).val(vl);
-						}
-						else if(b=='radio'){
+						if(type=='text') _.isUndefined(c$vo({n:name,t:target})) ? error('bind-value: undefined: '+target) : $(v).val(c$vo({n:name,t:target}));
+						else if(type=='radio'){
 						}
 					})($(v).data('bindValue'), $(v).attr('type'))
 				});
@@ -225,9 +186,19 @@
 		}
 	};
 
+	function error(msg) {throw new Error(msg)}
+	function c$vo(o) {
+		return Function('$vo','a', o.v ? '$vo.'+o.t+'=a;' : 'return $vo.'+o.t+';')(controller[o.n]['$vo'],o.v);
+	}
+	function c$exec(o) {
+		var data= o.v && c$vo({n:o.n,t:o.v.split(',')[0]})[o.v.split(',')[1]];
+		return Function('$vo','$data', '$vo.'+o.t.replace('(','.call(' + (o.v?'$data':'$vo') + (o.t.indexOf('()')<0?',':''))+';')
+		(controller[o.n]['$vo'],data);
+	}
+
+	// window
 	root.$log=function() {
 		k$.debug && ('I'==k$.browser[0]?console.log(JSON.stringify(_.toArray(arguments))):console.log.apply(root, _.toArray(arguments)));
 	};
-	function error(msg) {throw new Error(msg)}
 })(window);
 

@@ -29,13 +29,15 @@ k$.main(function($vo, $svc) {
 	$vo.vl.outAttr={};
 	$vo.vl.tab='a';
 
-	$vo.on.chgText=function(){
+	$vo.on.chgText=function(t){
+		$log('chgText', t, this);
 		$vo.vl.outText='text out';
 	};
 	$vo.on.chgHtml=function(){
 		$vo.vl.outHtml='<strong>html out</strong>';
 	};
 	$vo.on.chgEach=function(){
+		for(i=0;i<100;i++)
 		$vo.vl.outEach.push({c1:'c1',c2:'c2',c3:'c3'});
 	};
 	$vo.on.clickEach=function(){
@@ -103,8 +105,8 @@ k$.main(functoin($vo,$svc) {
 	$vo.outText='test';
 });
 </pre>
-					<a href="#" data-bind-click="on.chgText()"><strong>확 인</strong></a>
-					<div data-bind-html="vl.outText"></div>
+					<a href="#" data-bind-click="on.chgText('a')"><strong>확 인</strong></a>
+					<div data-bind-text="vl.outText"></div>
 				</p>
 			</div>
 		</div>
@@ -167,7 +169,7 @@ k$.main(functoin($vo,$svc) {
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">visible 바인딩</h3></div>
+			<div class="panel-heading"><h3 class="panel-title"><code>visible 바인딩</code></h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <code>data-bind-visible</code>
@@ -221,7 +223,7 @@ k$.main(functoin($vo,$svc) {
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">class 바인딩</h3></div>
+			<div class="panel-heading"><h3 class="panel-title"><code>class 바인딩</code></h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <code>data-bind-class</code>
