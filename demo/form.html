@@ -23,8 +23,14 @@ k$.main(function($vo, $svc) {
 	$vo.pull={};
 	$vo.pull.text='';
 
+	var http = _.after(1, kkk);
+	function kkk() {
+		$log('kkk');
+	}
 	$vo.clickPush=function() {
-		frm.push();
+		$log('ck');
+		http();
+		// frm.push();
 	};
 	$vo.clickPull=function() {
 		frm.pull();
