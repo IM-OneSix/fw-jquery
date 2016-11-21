@@ -147,145 +147,22 @@ _es.controller('$http', function($vo) {
 
 
 // ==============================
-si.provider('uiLoading',function(){
-var _m='로딩중',_c=0;
-return {message:message,$this:$this};
-function message(m){_m=m}
-function $this(){
-  if(!$('#ui-loading').length){
-    $('body').append(
-    	'<div id="ui-loading" class="ui-loading" style="display:none">'+
-    	'<div class="dimmed" style="display:block;z-index:99999;">'+
-    	'</div><div class="ui-loading-m" style="z-index:99999;">'+
-    	m+'</div></div>');
-  }
-  return {on:on,off:off,clear:clear};
-  function on(){
-    _c++;
-    setTimeout(function(){_c&&$('#ui-loading').css('display','block')},1);
-  }
-  function off(){
-    _c--;
-    if(_c<1){
-      _c=0;
-      $('#ui-loading').css('display','none');
-    }
-  }
-  function clear(){
-    _c=0;
-    off();
-  }
+function load(b,p,c,as,cs){
+  c=c==undefined?true:c,b=_.compact(_.flatten((b||'').split('/'))).join('/'),b=(b?'/'+b:'');
+  _.each(_.compact(_.flatten([p])),function(v){
+    var u=b+'/'+_.compact(_.flatten(v.split('/'))).join('/');
+    var e=_.last(u.split('.')).toUpperCase();
+    e=='JS'&&loadJS(u,c,as,cs);
+    e=='CSS'&&loadCSS(u,c,as);
+  })
 }
-
-});
-
-// ==============================
-function _getS(n){
-  return( fw.P[n] ? fw.P[n].$this : fw.S[n] )(_svc('S'))
+function loadJS(p,c,as,cs){var o={src:uri(p,c)};cs&&(o.charset=cs);addTag('script',o,as)}
+function loadCSS(p,c,as){addTag('link',{href:uri(p,c),rel:'stylesheet'},as)}
+function addTag(n,a,as){
+  var h=document.getElementsByTagName('head')[0],e=document.createElement(n);
+  _.each(a,function(v,k){e.setAttribute(k,v)});
+  as?h.appendChild(e):document.write(out(e));
 }
-function _svc(t){
-  return{
-    app:fw.APP,
-    get:function(n){return _getS(n)},
-    logger:function(n,c){return logger(n,c||C[t])},
-    $bind:function(n,e){_bindV(n,e)},
-    $controller:function(n,f){_bindC(n,f)},
-    $destroy:function(n){_removeC(n)}
-  }
-}
-
-// ==============================
-si.provider('lpopup',function(){
-var lp=layerPopup(),_beforeLoadController=function(){};
-return {setBeforeLoadController:setBeforeLoadController,$this:$this};
-
-function setBeforeLoadController(beforeLoadController){beforeLoadController && (_beforeLoadController=beforeLoadController)}
-function $this($svc){
-  var log = $svc.logger('lpopup');
-  var ajax = $svc.get('ajax');
-  var uiHelper = $svc.get('uiHelper');
-
-  return {
-    open:open,
-    close:close,
-    getParam:getParam,
-    alert:alert,
-    confirm:confirm,
-    tip:tip
-  };
-
-  function open(name,tpl,param,noUpdateUI){
-    var d = $.Deferred();
-    if(lp.get(name)){
-      log(name+' 레이어팝업 중복 호출!');
-      d.reject();
-      return d.promise();
-    }
-
-    param=param||{}
-    lp.set(name,{d:d,param:_.clone(param)});
-
-    ajax.html(tpl,false,true).then(function(data){
-      if(data){
-        lp.set(name,{d:d,param:_.clone(param)});
-
-        var $el=$(data);
-
-        $svc.$bind(name,$el);
-
-        $('#layer .dimmed').remove();
-        $('#layer').append('<div class="dimmed" style="display:block;z-index:9999;"></div>');
-        $('#layer').append($el);
-
-        $svc.$controller(name,function(element){
-          if(!noUpdateUI) {
-            uiHelper.updateUI(element);
-          }
-          _beforeLoadController(element);
-        });
-
-        $.openDimPop(name);
-      }else{
-        var msg=['[ERROR:404]','lpopup('+name+')화면템플릿 파일이 존재하지 않습니다.','FILENAME:'+tpl].join('\r\n');
-        si.app.st()=='L' && alert(msg);
-        page.error(msg);
-      }
-    });
-
-    return d.promise();
-  }
-
-  function getParam($vo){return lp.get($vo.$name()).param}
-
-  function close($vo,data) {
-    var d = lp.get($vo.$name()).d;
-    var p = getParam($vo).parent||{};
-
-    p.id && $('#'+p.id).focus();
-    lp.remove($vo.$name());
-    $svc.$destroy($vo.$name());
-
-    $('#layer .dimmed').remove();
-    $('#layer .dimmed').hide();
-    lp.size()>0 && $('<div class="dimmed" style="display:block;z-index:9999;"></div>').insertBefore($('#layer >div').last());
-
-    $('#container .dimmed').hide();
-    
-    d.resolve(data);
-  }
-
-  function alert(m,e){return open('layerAlert','/siw/common/biz/common/lypop-alert.html',{message:m}, true).then(function() {e && $('#'+(typeof e === 'string' ? e : e.target.id)).focus()})}
-  function confirm(m){return open('layerConfirm','/siw/common/biz/common/lypop-confirm.html',{message:m}, true)}
-}
-function layerPopup(){
-  var LPINF={};
-  return {get:get,set:set,remove:remove,size:size};
-  function get(name){return LPINF[name]}
-  function set(name,data){LPINF[name]=data}
-  function remove(name){delete LPINF[name]}
-  function size(){return _.size(LPINF)}
-}
-});
 
 
 })(window);
