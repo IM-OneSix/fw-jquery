@@ -1,74 +1,71 @@
-		<div class="page-header">
-			<h3>화면 바이딩</h3>
-		</div>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fw-jquery</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="../../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../common.css" rel="stylesheet">
+
+	<script src="../../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../../app/lib/underscore.js"></script>
+	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+
+	<script src="../../app/lib/jquery-svc.js"></script>
+	<script src="view.js"></script>
+</head>
+
+<body>
+	<div data-bind-include="_top.html"></div>
+
+	<!-- view-content -->
+	<div id="view-content" class="container" data-bind-view="view">
+		<div class="page-header"><h3>화면제어</h3></div>
+
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">text 바인딩</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">text</h3></div>
 			<div class="panel-body">
-				<p>
-					에트리뷰트: <code>data-bind-text</code>
-<pre><strong>Example</strong>
-&lt;span data-bind-text="outText"&gt;test&lt;/span&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.outText='test';
-});
+<pre>
+var v={text:{out:'out text'}};
+vo.push(v);
 </pre>
-					<a href="#" data-bind-click="onClick('a')"><strong>확 인</strong></a>
-					<div data-bind-text="vl.outText"></div>
+				<p>
+					<div>에트리뷰트: <code>data-bind-text</code></div>
+					<hr/>
+					<a href="#" data-bind-click="clickText()"><strong>확 인</strong></a>
+					<div data-bind-text="txt.out"></div>
 				</p>
 			</div>
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">html 바인딩</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">html</h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <code>data-bind-html</code>
-<pre><strong>Example</strong>
-&lt;span data-bind-html="htmltOut"&gt;<strong>test</strong>&lt;/span&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.outHtml='&lt;strong&gt;test&lt;/strong&gt;';
-});
-</pre>
-					<a href="#" data-bind-click="on.chgHtml()"><strong>확 인</strong></a>
-					<div data-bind-html="vl['outHtml']"></div>
+					<hr/>
+					<a href="#" data-bind-click="clickHtml()"><strong>확 인</strong></a>
+					<div data-bind-html="html.out"></div>
 				</p>
 			</div>
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">each 바인딩</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">each</h3></div>
 			<div class="panel-body">
 				<p>
-					에트리뷰트: <code>data-bind-each</code>
-<pre><strong>Example</strong>
-&lt;table data-bind-each="htmltOut"&gt;
-&lt;tbody&gt;
-	&lt;tr&gt;
-		&lt;td&gt;{{=$data.c1}}&lt;/td&gt;
-		&lt;td&gt;{{=$data.c2}}&lt;/td&gt;
-		&lt;td&gt;{{=$data.c3}}&lt;/td&gt;
-	&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.outHtml=[
-		{c1:'a1',c2:'a2',c3:'a3'},
-		{c1:'b1',c2:'b2',c3:'b3'},
-		{c1:'c1',c2:'c2',c3:'c3'}
-	];
-});
-</pre>
-					<a href="#" data-bind-click="on.chgEach()"><strong>확 인</strong></a>
-					<table class="table table-striped">
-					<tbody data-bind-each="vl.outEach">
+					<div>에트리뷰트: <code>data-bind-each</code></div>
+					<div>값: $index, $data, {{= }} </div>
+					<hr/>
+					<a href="#" data-bind-click="clickEach()"><strong>확 인</strong></a>
+					<table class="table table-bordered">
+					<tbody data-bind-each="lst.table">
 						<tr>
- 							<th>{{= $index }}</th>
-							<td>{{= $data.c1 }}</td>
-							<td><a href="#" data-bind-click="on.clickEach()">{{= $data.c2 }}</a></td>
-							<td>{{= $data.c3 }}</td>
+							<th>{{=$index+1}}</th>
+							<td>{{=$data['c1']}}</td>
+							<td><a href="#" data-bind-click="clickTable({{=$index}})">{{=$data.c2}}</a></td>
 						</tr>
 					</tbody>
 					</table>
@@ -77,71 +74,39 @@ k$.main(functoin($vo,$svc) {
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title"><code>visible 바인딩</code></h3></div>
+			<div class="panel-heading"><h3 class="panel-title">visible</h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <code>data-bind-visible</code>
-<pre><strong>Example</strong>
-&lt;span data-bind-visible="vl.outVisible"&gt;<strong>test</strong>&lt;/span&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.outVisible=true;
-});
-</pre>
-					<button type="button" class="btn btn-primary" data-bind-click="on.chgVisible(true,1)">show</button>
-					<button type="button" class="btn btn-default" data-bind-click="on.chgVisible(false,2)">hide</button>
-					<div data-bind-visible="vl.outVisible" style="margin-top:10px;">
-						<button type="button" class="btn btn-default">Default</button>
-						<button type="button" class="btn btn-primary">Primary</button>
-						<button type="button" class="btn btn-success">Success</button>
-						<button type="button" class="btn btn-info">Info</button>
-						<button type="button" class="btn btn-warning">Warning</button>
-						<button type="button" class="btn btn-danger">Danger</button>
+					<hr/>
+					<button type="button" class="btn btn-default" data-bind-click="clickVisible(false, '')">hide</button>
+					<button type="button" class="btn btn-primary" data-bind-click="clickVisible(true, '1')">show</button>
+					<div data-bind-visible="show.type1" style="margin-top:10px;">
+						<div class="alert alert-success" role="alert">Well done! You successfully read this important alert message.</div>
 					</div>
-					<div data-bind-visible="vl.outText==1" style="margin-top:10px;">
-						<button type="button" class="btn btn-default">Default1</button>
-						<button type="button" class="btn btn-primary">Primary</button>
-						<button type="button" class="btn btn-success">Success</button>
-						<button type="button" class="btn btn-info">Info</button>
-						<button type="button" class="btn btn-warning">Warning</button>
-						<button type="button" class="btn btn-danger">Danger</button>
+					<div data-bind-visible="show['type2']=='1'" style="margin-top:10px;">
+						<div class="alert alert-danger" role="alert">Oh snap! Change a few things up and try submitting again.</div>
 					</div>
 				</p>
 			</div>
 		</div>
 
+
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">attribute 바인딩</h3></div>
+			<div class="panel-heading"><h3 class="panel-title"><code>attribute</code></h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <code>data-bind-attr</code>
-<pre><strong>Example</strong>
-&lt;span data-bind-attr="outAttr"&gt;<strong>button</strong>&lt;/span&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.outAttr='{id:'abcd', calss:'btn btn-default'}';
-});
-</pre>
-					<a href="#" data-bind-click="on.chgAttr()"><strong>확 인</strong></a>
-					<div>
-						<a href="#" data-bind-attr="vl.outAttr">버 튼</a>
-					</div>
 				</p>
 			</div>
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title"><code>class 바인딩</code></h3></div>
+			<div class="panel-heading"><h3 class="panel-title"><code>class</code></h3></div>
 			<div class="panel-body">
 				<p>
 					에트리뷰트: <code>data-bind-class</code>
-<pre><strong>Example</strong>
-&lt;button class="btn" data-bind-class="btn-primary:outClass=='a'"&gt;<strong>test</strong>&lt;/button&gt;<br/>
-// script
-k$.main(functoin($vo,$svc) {
-	$vo.outClass='a';
-});
-</pre>
+					<hr/>
 					<ul class="nav nav-tabs">
 						<li role="presentation" data-bind-class="active:vl.tab=='a',on:vl.tab==1"><a href="#" data-bind-click="on.chgTab('a')">Home</a></li>
 						<li role="presentation" data-bind-class="active:vl.tab=='b'"><a href="#" data-bind-click="on.chgTab('b')">Profile</a></li>
@@ -150,3 +115,9 @@ k$.main(functoin($vo,$svc) {
 				</p>
 			</div>
 		</div>
+
+
+	<div data-bind-include="_footer.html"></div>
+</body>
+	
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fw-jquery</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="../../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../common.css" rel="stylesheet">
+
+	<script src="../../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../../app/lib/underscore.js"></script>
+	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+
+	<script src="../../app/lib/jquery-svc.js"></script>
+	<script src="index.js"></script>
+</head>
+
+<body>
+	<div data-bind-param="{a:'1', b:'c'}"></div>
+	<div data-bind-include="_top.html"></div>
+
+	<div id="view-content" class="container" data-bind-view="index">
+		<div class="page-header"><h3>기본설명</h3></div>
+
+		<!-- 로그, 얼럿, 컨펌 -->
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">로그, 얼럿, 컨펌</h3></div>
+			<div class="panel-body">
+				<p>
+					<button class="btn btn-default" data-bind-click="log()">로그</button>
+					<button class="btn btn-default">얼럿</button>
+					<button class="btn btn-default">컨펌</button>
+				</p>
+<pre>
+<i>// 로그</i>
+$log('message');
+<i>// 얼럿</i>
+$svc.get('popup').alert('message');
+<i>// 컨펌</i>
+$svc.get('popup').confirm('message').then(function(yn){
+});
+</pre>
+			</div>
+		</div>
+
+		<!-- 컨텐츠삽입 -->
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">컨텐츠삽입</h3></div>
+			<div class="panel-body">
+				<p>
+					에트리뷰트: <code>data-bind-include</code><br/>
+					값: 컨텐츠경로 (ex: /abc/abc.html)<br/>
+				</p>
+			</div>
+		</div>
+
+		<!-- 뷰 기본구조 -->
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">뷰 기본구조</h3></div>
+			<div class="panel-body">
+				<p>
+					에트리뷰트: <code>data-bind-view</code><br/>
+					값: 뷰이름
+				</p>
+<pre>
+<i>// 시작시 호출될 view, js를 등록</i>
+$svc.bootstrap('', []);
+
+<i>// 뷰 구현</i>
+$svc.view('', functoin(param) {
+	<i>// 뷰바인딩</i>
+	var vo=$svc.bind({name:'',url:''});
+	<i>// 뷰이벤트핸들러</i>
+	var on=vo.event();
+	<i>// 뷰렌더링</i>
+	vo.render();
+});
+
+<i>// 뷰 호출</i>
+$svc.get('view').load({
+	name:'',
+	param:{},
+	single:true
+});
+</pre>
+			</div>
+		</div>
+
+		<!-- 팝업 기본구조 -->
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">팝업 기본구조</h3></div>
+			<div class="panel-body">
+				<p>
+				</p>
+<pre>
+<i>// 팝업 구현</i>
+$svc.popup('', functoin(param,$close) {
+	<i>// 뷰바인딩</i>
+	var vo=$svc.bind({name:'',url:''});
+	<i>// 뷰이벤트핸들러</i>
+	var on=vo.event();
+	<i>// 뷰렌더링</i>
+	vo.render();
+	<i>// 팝업닫음</i>
+	on.close=function(){
+		$close();
+	};
+});
+
+<i>// 팝업 호출</i>
+$svc.get('popup').open({
+	name:'',
+	param:{}
+});
+</pre>
+			</div>
+		</div>
+
+
+	</div>
+
+	<div data-bind-include="_footer.html"></div>
+</body>
+	
+</html>
