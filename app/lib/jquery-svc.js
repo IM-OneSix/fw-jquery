@@ -188,6 +188,7 @@
 						$.ajax({
 							async:!sync,
 							type: cache?'get':'post',
+							crossDomain: true,
 							contentType:'text/html',
 							url:uri(url,cache),
 							success:d.resolve,
