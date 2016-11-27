@@ -12,7 +12,8 @@ $svc.view('form',function(param){
 		$.ajax({
 			type:'post',
 			contentType:'application/json',
-			url:'formPopup.html',
+			// url:'formPopup.html',
+			url:'test.json',
 			success:function(d){
 				$log('s', d);
 			},
