@@ -310,7 +310,7 @@
 
 	$(document).ready(function(){
 		_.each($('[data-bind-include]'), function(v){
-			callService.ajax().html($(v).data('bindInclude'), false, false).then(function(rs){$(v).html(rs)})
+			callService.ajax().html($(v).data('bindInclude'), true, false).then(function(rs){$(v).html(rs)})
 		}),
 		_.each(bootStrap.lib, function(v){
 			var h=document.getElementsByTagName('head')[0],e=document.createElement('script');
