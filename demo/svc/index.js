@@ -17,5 +17,13 @@ $svc.view('index',function(param){
 			$log('결과값', yn);
 		});
 	};
+	on.loading=function(){
+		var dm = $svc.get('dimmed');
+		dm.on();
+		setTimeout(function(){
+			dm.off();
+		}, 2000);
+
+	}
 });
 })()

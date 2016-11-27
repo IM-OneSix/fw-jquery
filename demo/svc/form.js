@@ -27,14 +27,10 @@ $svc.view('form',function(param){
 		$svc.get('view').load({name:'formView', param:vo.pull()});
 	};
 	on.clickAjax=function(){
-		$svc.get('dimmed').on();
-		setTimeout(function(){
-			$svc.get('dimmed').off();
-			$svc.get('http').get('form.json').then(function(rsHttp){
-				$log(rsHttp);
-				vo.push(rsHttp);
-			});
-		}, 2000);
+		$svc.get('http').get('form.json').then(function(rsHttp){
+			$log(rsHttp);
+			vo.push(rsHttp);
+		});
 	};
 });
 })()
