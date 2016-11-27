@@ -204,12 +204,46 @@
 						d.resolve(null),
 					d.promise()
 				}($.Deferred())
+			},
+			get:function(url,pm,sync,cache){
+				return function(d){
+					return url ? 
+						$.ajax({
+							async:!sync,
+							type: 'get',
+							contentType:'application/json',
+							url:uri(url,cache),
+							data:serialize(pm),
+							success:function(data){
+								d.resolve({data:data||{},status:200})
+							},
+							error:function(r){
+								d.resolve({status:r.status==200?500:r.status,data:r.responseText})
+							}
+						}) :
+						d.resolve(null),
+					d.promise()
+				}($.Deferred())
 			}
 		}
 		function uri(p,c){return(c=!c?'?v='+_.now():''), p+c}
 		function serialize(data){return _.map(data,function(v,k){return [k,'=',v].join('');}).join('&')}
 	};
 	callService.http=function(){
+		var dm=callService.dimmed();
+		return {
+			http:function(){},
+			get:function(url,param,loading){
+				loading=(loading==undefined?true:!!loading);
+				loading&&dm.on();
+
+				return callService.ajax().get(url,param).then(function(rs){
+					return dm.off(), rs.data
+					// $log('ajax', url, rs.data);
+				})
+			},
+			post:function(){}
+		}
 	};
 	callService.view=function(){
 		return {
@@ -294,13 +328,14 @@
 			return is && (
 				$('#__flying_partition__').append(
 					'<div data-party-message style="position:absolute;top:30%;font-size:2em;color:#fff;">'+
-					'<div class="_w8_">'+
-					'<div class="b b1" id="wBall_1"><div class="i"></div></div>'+
-					'<div class="b b2" id="wBall_2"><div class="i"></div></div>'+
-					'<div class="b b3" id="wBall_3"><div class="i"></div></div>'+
-					'<div class="b b4" id="wBall_4"><div class="i"></div></div>'+
-					'<div class="b b5" id="wBall_5"><div class="i"></div></div>'+
-					'</div>'+
+					'<div class="spinner"></div>'+
+					// '<div class="_w8_">'+
+					// '<div class="b b1" id="wBall_1"><div class="i"></div></div>'+
+					// '<div class="b b2" id="wBall_2"><div class="i"></div></div>'+
+					// '<div class="b b3" id="wBall_3"><div class="i"></div></div>'+
+					// '<div class="b b4" id="wBall_4"><div class="i"></div></div>'+
+					// '<div class="b b5" id="wBall_5"><div class="i"></div></div>'+
+					// '</div>'+
 					'</div>'
 				),
 				$('#__flying_partition__ [data-party-message]').css('left', (

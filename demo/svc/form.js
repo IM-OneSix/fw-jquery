@@ -22,12 +22,19 @@ $svc.view('form',function(param){
 		// 		text:'edit box 미입력'
 		// 	}
 		// });
-		// var v=vo.pull();
-		// $log('view', v);
-		// $svc.get('view').load({name:'formView', param:vo.pull()});
-		$svc.get('dimmed').on();
+		var v=vo.pull();
+		$log('view', v);
+		$svc.get('view').load({name:'formView', param:vo.pull()});
 	};
 	on.clickAjax=function(){
+		$svc.get('dimmed').on();
+		setTimeout(function(){
+			$svc.get('dimmed').off();
+			$svc.get('http').get('form.json').then(function(rsHttp){
+				$log(rsHttp);
+				vo.push(rsHttp);
+			});
+		}, 2000);
 	};
 });
 })()

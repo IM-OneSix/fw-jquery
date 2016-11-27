@@ -8,104 +8,17 @@ body {padding-top:40px}
 pre >i {font-style:normal;color:#3a3;}
 pre >b {color:#a33;}
 
-._w8_ {
-	position: relative;
-	width: 78px;
-	height:78px;
-	margin:auto;
+.spinner {
+  margin: 50px;
+  height: 48px;
+  width: 48px;
+  animation: rotate 0.8s infinite linear;
+  border: 10px solid #fff;
+  border-right-color: transparent;
+  border-radius: 50%;
 }
 
-._w8_ .b {
-	position: absolute;
-	width: 74px;
-	height: 74px;
-	opacity: 0;
-	transform: rotate(225deg);
-	animation: orbit 6.96s infinite;
-}
-
-._w8_ .b .i{
-	position: absolute;
-	width: 10px;
-	height: 10px;
-	background: rgb(255,255,255);
-	left:0px;
-	top:0px;
-	border-radius: 10px;
-}
-
-._w8_ .b.b1 {
-	animation-delay: 1.52s;
-}
-
-._w8_ .b.b2 {
-	animation-delay: 0.3s;
-}
-
-._w8_ .b.b3 {
-	animation-delay: 0.61s;
-}
-
-._w8_ .b.b4 {
-	animation-delay: 0.91s;
-}
-
-._w8_ .b.b5 {
-	animation-delay: 1.22s;
-}
-
-
-
-@keyframes orbit {
-	0% {
-		opacity: 1;
-		z-index:99;
-		transform: rotate(180deg);
-		animation-timing-function: ease-out;
-	}
-
-	7% {
-		opacity: 1;
-		transform: rotate(300deg);
-		animation-timing-function: linear;
-		origin:0%;
-	}
-
-	30% {
-		opacity: 1;
-		transform:rotate(410deg);
-		animation-timing-function: ease-in-out;
-		origin:7%;
-	}
-
-	39% {
-		opacity: 1;
-		transform: rotate(645deg);
-		animation-timing-function: linear;
-		origin:30%;
-	}
-
-	70% {
-		opacity: 1;
-		transform: rotate(770deg);
-		animation-timing-function: ease-out;
-		origin:39%;
-	}
-
-	75% {
-		opacity: 1;
-		transform: rotate(900deg);
-		animation-timing-function: ease-out;
-		origin:70%;
-	}
-
-	76% {
-	opacity: 0;
-		transform:rotate(900deg);
-	}
-
-	100% {
-	opacity: 0;
-		transform: rotate(900deg);
-	}
+@keyframes rotate {
+  0%    { transform: rotate(0deg); }
+  100%  { transform: rotate(360deg); }
 }
