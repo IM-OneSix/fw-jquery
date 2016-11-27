@@ -9,16 +9,18 @@ $svc.view('form',function(param){
 	vo.render();
 
 	on.clickPopup=function(){
-		// $.ajax({
-		// 					type:'post',
-		// 					contentType:'text/html',
-		// 					url:uri(url,cache),
-		// 					success:d.resolve,
-		// 					error:function(){d.resolve(null)}
-		// });
-$.post("https://im-onesix.github.io/fw-jquery/demo/svc/formPopup.html", function(data) {
-   $log('-', data);
- });
+		$.ajax({
+			type:'post',
+			contentType:'application/json',
+			url:'formPopup.html',
+			success:function(d){
+				$log('s', d);
+			},
+			error:function(d){
+				$log('e', d);
+			}
+		});
+
 		// $svc.get('popup').open({name:'lpFormPopup'}).then(function(rs){
 		// 	$log(rs);
 		// });
