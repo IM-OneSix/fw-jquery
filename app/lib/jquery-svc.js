@@ -187,8 +187,8 @@
 					return url ? 
 						$.ajax({
 							async:!sync,
-							type: cache?'get':'post',
-							crossDomain: true,
+							// type: cache?'get':'post',
+							type: 'get',
 							contentType:'text/html',
 							url:uri(url,cache),
 							success:d.resolve,
