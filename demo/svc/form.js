@@ -16,7 +16,7 @@ $svc.view('form',function(param){
 		// 					success:d.resolve,
 		// 					error:function(){d.resolve(null)}
 		// });
-$.post("formPopup.html", function(data) {
+$.post("https://im-onesix.github.io/fw-jquery/demo/svc/formPopup.html", function(data) {
    $log('-', data);
  });
 		// $svc.get('popup').open({name:'lpFormPopup'}).then(function(rs){
