@@ -188,8 +188,9 @@
 						$.ajax({
 							async:!sync,
 							// type: cache?'get':'post',
+							// contentType:'text/html',
 							type: 'get',
-							contentType:'text/html',
+							contentType:'application/json',
 							url:uri(url,cache),
 							success:d.resolve,
 							error:function(){d.resolve(null)}

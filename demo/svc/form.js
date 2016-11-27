@@ -12,8 +12,7 @@ $svc.view('form',function(param){
 		$.ajax({
 			type:'get',
 			contentType:'application/json',
-			// url:'formPopup.html',
-			url:'test.json',
+			url:'formPopup.html',
 			success:function(d){
 				$log('s', d);
 			},
@@ -22,9 +21,9 @@ $svc.view('form',function(param){
 			}
 		});
 
-		// $svc.get('popup').open({name:'lpFormPopup'}).then(function(rs){
-		// 	$log(rs);
-		// });
+		$svc.get('popup').open({name:'lpFormPopup'}).then(function(rs){
+			$log(rs);
+		});
 	};
 	on.clickView=function(){
 		var v=vo.pull({
