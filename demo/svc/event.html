@@ -18,7 +18,7 @@
 </head>
 
 <body>
-	<div data-bind-include="_top.html"></div>
+	<div data-bind-include="layer/top.html"></div>
 
 	<!-- view-content -->
 	<div id="view-content" class="container" data-bind-view="event">
@@ -53,7 +53,7 @@ on.click=function(p){
 					<div>에트리뷰트: <code>data-bind-change</code></div>
 					<div>값:함수 호출</div>
 					<hr/>
-					<select class="form-control" data-bind-change="onChange()">
+					<select class="form-control" data-bind-value="sel" data-bind-change="change()">
 						<option value="01">value 01</option>
 						<option value="02">value 02</option>
 						<option value="03">value 03</option>
@@ -63,7 +63,7 @@ on.click=function(p){
 		</div>
 	</div>
 
-	<div data-bind-include="_footer.html"></div>
+	<div data-bind-include="layer/footer.html"></div>
 </body>
 	
 </html>

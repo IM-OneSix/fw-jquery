@@ -1,0 +1,8 @@
+{
+	"frm":{
+		"text":"get text"
+		"check":['a', 'c'],
+		"radio":['02'],
+		"select":"3"
+	}
+}

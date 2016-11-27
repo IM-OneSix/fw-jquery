@@ -85,8 +85,8 @@
 				function typeCheck(t){return (t=='radio'||t=='checkbox')&&true}
 				return _.each($vi(lc.name, 'value'), function(v){
 					return function(target, type){
-						$log('1', target);
-						obj(target, vo),
+						// $log('1', target);
+						obj(target, vo);
 						Function('a', 'b', typeCheck(type) ? 
 							'_.isEmpty(b.'+target+')&&(b.'+target+'=[]), $(a).is(":checked")&&b.'+target+'.push($(a).val())':
 							'b.'+target+'=$(a).val()'
@@ -98,7 +98,7 @@
 						)
 					}($(v).data('bindValue'), $(v).attr('type'))
 				}), function(){
-					var msg=Function('a', 'return a.'+point)(o);
+					var msg=o && Function('a', 'return a.'+point)(o);
 					return o&&point ?
 					(msg && $svc.get('popup').alert(msg).then(function(){
 						$vi(lc.name).find('[data-bind-value="'+point+'"]')[0].focus()
@@ -121,11 +121,17 @@
 						Function('a','b','!_.isEmpty(b.'+target+')&&$(a).html(b.'+target+')')(v,o)
 					}($(v).data('bindHtml'))
 				}),
+				_.each($vi(lc.name, 'value'), function(v){
+					return function(target){
+						obj(target, o),
+						Function('a','b','!_.isEmpty(b.'+target+')&&$(a).val(b.'+target+')')(v,o)
+					}($(v).data('bindValue'))
+				}),
 				_.each($vi(lc.name, 'each'), function(v){
 					return function(target){
+						obj(target, o);
 						var txt='', tmp=eachTemp[target],
 						data=Function('a', 'return a.'+target)(o);
-						obj(target, o),
 						!_.isEmpty(data) && ((eachData[target]=data),
 						_.each(data, function(v1,k1){
 							w.$index=k1, w.$data=v1, txt+=tmp(v1)
@@ -190,7 +196,7 @@
 							// type: cache?'get':'post',
 							// contentType:'text/html',
 							type: 'get',
-							contentType:'application/json',
+							contentType:'text/html',
 							url:uri(url,cache),
 							success:d.resolve,
 							error:function(){d.resolve(null)}
@@ -202,6 +208,8 @@
 		}
 		function uri(p,c){return(c=!c?'?v='+_.now():''), p+c}
 		function serialize(data){return _.map(data,function(v,k){return [k,'=',v].join('');}).join('&')}
+	};
+	callService.http=function(){
 	};
 	callService.view=function(){
 		return {

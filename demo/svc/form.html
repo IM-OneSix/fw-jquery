@@ -18,7 +18,6 @@
 </head>
 
 <body>
-
 	<div data-bind-include="layer/top.html"></div>
 
 	<!-- view-content -->
@@ -47,14 +46,14 @@
 <div class="form-group">
 	<label>radio button</label>
 	<div class="radio">
-		<label><input type="radio" name="radio1" value="01"> 01</label>
-		<label><input type="radio" name="radio1" value="02"> 02</label>
-		<label><input type="radio" name="radio1" value="03"> 03</label>
+		<label><input type="radio" name="radio1" value="01" data-bind-value="frm.radio"> 01</label>
+		<label><input type="radio" name="radio1" value="02" data-bind-value="frm.radio"> 02</label>
+		<label><input type="radio" name="radio1" value="03" data-bind-value="frm.radio"> 03</label>
 	</div>
 </div>
 <div class="form-group">
 	<label>select</label>
-	<select class="form-control">
+	<select class="form-control" data-bind-value="frm.select">
 		<option value="1">1. a</option>
 		<option value="2">2. a</option>
 		<option value="3">3. a</option>
@@ -63,17 +62,17 @@
 
 					<button class="btn btn-default" data-bind-click="clickPopup()">팝업</button>
 					<button class="btn btn-default" data-bind-click="clickView()">화면</button>
+					<button class="btn btn-default" data-bind-click="clickAjax()">ajax</button>
 				</p>
 			</div>
 		</div>
 		</div>
 
-		<div data-bind-view="form2"></div>
+		<div data-bind-view="formView"></div>
 	</div>
 
 
 	<div data-bind-include="layer/footer.html"></div>
-
 </body>
 	
 </html>

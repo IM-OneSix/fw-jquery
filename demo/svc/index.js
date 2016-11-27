@@ -9,5 +9,13 @@ $svc.view('index',function(param){
 	on.log=function(){
 		$log('파라메터', param);
 	};
+	on.alert=function(){
+		$svc.get('popup').alert('alert message');
+	};
+	on.confirm=function(){
+		$svc.get('popup').confirm('confirm message').then(function(yn){
+			$log('결과값', yn);
+		});
+	};
 });
 })()

@@ -9,5 +9,9 @@ $svc.view('event',function(param){
 	on.click=function(p){
 		$log('param', p);
 	};
+	on.change=function(){
+		// var v=vo.pull();
+		// $log('param', v.sel);
+	};
 });
 })()

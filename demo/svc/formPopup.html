@@ -1,6 +1,36 @@
 <div class="alert alert-info" style="position:absolute;top:10%;left:10%;width:80%;">
 	<button type="button" class="close" data-bind-click="close()"><span aria-hidden="true">&times;</span></button>
-	<strong>Warning!</strong> Better check yourself, you're not looking too good.
+	<div>
+		<div class="form-group">
+			<label>edit box</label>
+			<input type="text" class="form-control" placeholder="edit box" data-bind-value="frm.text">
+		</div>
+		<div class="form-group">
+			<label>check box</label>
+			<div class="checkbox">
+				<label><input type="checkbox" name="check1" value="a" data-bind-value="frm.check"> a</label>
+				<label><input type="checkbox" name="check1" value="b" data-bind-value="frm.check"> b</label>
+				<label><input type="checkbox" name="check1" value="c" data-bind-value="frm.check"> c</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>radio button</label>
+			<div class="radio">
+				<label><input type="radio" name="radio1" value="01" data-bind-value="frm.radio"> 01</label>
+				<label><input type="radio" name="radio1" value="02" data-bind-value="frm.radio"> 02</label>
+				<label><input type="radio" name="radio1" value="03" data-bind-value="frm.radio"> 03</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>select</label>
+			<select class="form-control" data-bind-value="frm.select">
+				<option value="1">1. a</option>
+				<option value="2">2. a</option>
+				<option value="3">3. a</option>
+			</select>
+		</div>
+	</div>
+
 	<div style="margin-top:20px;text-align:center;">
 		<button class="btn btn-default btn-sm" data-bind-click="close()">확인</button>
 	</div>

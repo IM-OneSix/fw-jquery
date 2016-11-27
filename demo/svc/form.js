@@ -1,6 +1,7 @@
 (function(){
 $svc.bootstrap('form', [
-	'formPopup.js'
+	'formPopup.js',
+	'formView.js'
 ]);
 
 $svc.view('form',function(param){
@@ -9,29 +10,24 @@ $svc.view('form',function(param){
 	vo.render();
 
 	on.clickPopup=function(){
-		$.ajax({
-			type:'get',
-			contentType:'application/json',
-			url:'formPopup.html',
-			success:function(d){
-				$log('s', d);
-			},
-			error:function(d){
-				$log('e', d);
-			}
-		});
-
-		$svc.get('popup').open({name:'lpFormPopup'}).then(function(rs){
+		var v=vo.pull();
+		$svc.get('popup').open({name:'lpFormPopup', param:v}).then(function(rs){
 			$log(rs);
+			vo.push(rs);
 		});
 	};
 	on.clickView=function(){
-		var v=vo.pull({
-			frm:{
-				text:'edit box 미입력'
-			}
-		});
-		$log('view', v);
+		// var v=vo.pull({
+		// 	frm:{
+		// 		text:'edit box 미입력'
+		// 	}
+		// });
+		// var v=vo.pull();
+		// $log('view', v);
+		// $svc.get('view').load({name:'formView', param:vo.pull()});
+		$svc.get('dimmed').on();
+	};
+	on.clickAjax=function(){
 	};
 });
 })()
