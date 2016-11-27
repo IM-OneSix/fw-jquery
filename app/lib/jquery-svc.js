@@ -329,13 +329,6 @@
 				$('#__flying_partition__').append(
 					'<div data-party-message style="position:absolute;top:30%;font-size:2em;color:#fff;">'+
 					'<div class="spinner"></div>'+
-					// '<div class="_w8_">'+
-					// '<div class="b b1" id="wBall_1"><div class="i"></div></div>'+
-					// '<div class="b b2" id="wBall_2"><div class="i"></div></div>'+
-					// '<div class="b b3" id="wBall_3"><div class="i"></div></div>'+
-					// '<div class="b b4" id="wBall_4"><div class="i"></div></div>'+
-					// '<div class="b b5" id="wBall_5"><div class="i"></div></div>'+
-					// '</div>'+
 					'</div>'
 				),
 				$('#__flying_partition__ [data-party-message]').css('left', (
