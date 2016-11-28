@@ -13,7 +13,7 @@
 	<script src="../../app/lib/underscore.js"></script>
 	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
 
-	<script src="../../app/lib/jquery-svc.js"></script>
+	<script src="../../app/lib/jquery-svc-min.js"></script>
 	<script src="index.js"></script>
 </head>
 
@@ -32,9 +32,7 @@
 					<button class="btn btn-default" data-bind-click="log()">로그</button>
 					<button class="btn btn-default" data-bind-click="alert()">얼럿</button>
 					<button class="btn btn-default" data-bind-click="confirm()">컨펌</button>
-					<button class="btn btn-default" data-bind-click="loading()">로딩</button>
 				</p>
-<!-- 
 <pre>
 <i>// 로그</i>
 $log('message');
@@ -44,7 +42,6 @@ $svc.get('popup').alert('message');
 $svc.get('popup').confirm('message').then(function(yn){
 });
 </pre>
- -->
 			</div>
 		</div>
 
@@ -56,6 +53,68 @@ $svc.get('popup').confirm('message').then(function(yn){
 					에트리뷰트: <code>data-bind-include</code><br/>
 					값: 컨텐츠경로<br/>
 				</p>
+			</div>
+		</div>
+
+		<!-- 뷰 기본구조 -->
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">뷰 기본구조</h3></div>
+			<div class="panel-body">
+				<p>
+					에트리뷰트: <code>data-bind-view</code><br/>
+					값: 뷰이름
+				</p>
+<pre>
+<i>// 시작시 호출될 view, js를 등록</i>
+$svc.bootstrap('', []);
+
+<i>// 뷰 구현</i>
+$svc.view('', functoin(param) {
+	<i>// 뷰바인딩</i>
+	var vo=$svc.bind({name:'',url:''});
+	<i>// 뷰이벤트핸들러</i>
+	var on=vo.event();
+	<i>// 뷰렌더링</i>
+	vo.render();
+});
+
+<i>// 뷰 호출</i>
+$svc.get('view').load({
+	name:'',
+	param:{},
+	single:true
+});
+</pre>
+			</div>
+		</div>
+
+		<!-- 팝업 기본구조 -->
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">팝업 기본구조</h3></div>
+			<div class="panel-body">
+				<p>
+				</p>
+<pre>
+<i>// 팝업 구현</i>
+$svc.popup('', functoin(param,$close) {
+	<i>// 뷰바인딩</i>
+	var vo=$svc.bind({name:'',url:''});
+	<i>// 뷰이벤트핸들러</i>
+	var on=vo.event();
+	<i>// 뷰렌더링</i>
+	vo.render();
+	<i>// 팝업닫음</i>
+	on.close=function(){
+		$close();
+	};
+});
+
+<i>// 팝업 호출</i>
+$svc.get('popup').open({
+	name:'',
+	param:{}
+});
+</pre>
 			</div>
 		</div>
 

@@ -14,7 +14,8 @@ $svc.view('view',function(param){
 					{c1:'a2', c2:'b2'},
 					{c1:'a3', c2:'b3'}
 				]
-			}
+			},
+			class:{tab:'a'}
 		});
 	});
 
@@ -36,6 +37,15 @@ $svc.view('view',function(param){
 	on.clickVisible=function(is, p){
 		$log(is);
 		vo.push({show:{type1:is, type2:p}});
+	};
+	on.clickFocus=function(){
+		vo.focus('fcEdit');
+	};
+	on.clickAttr=function(){
+		vo.push({attr:{class:'btn btn-default', id:'test-id'}})
+	};
+	on.changeTab=function(t){
+		vo.push({class:{tab:t}})
 	};
 
 });

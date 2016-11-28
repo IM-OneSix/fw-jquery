@@ -77,15 +77,11 @@
 					update()
 				});
 			},
-			event:function(){
-				return collee={}
-			},
 			pull:function(o){
 				var vo={}, point='';
 				function typeCheck(t){return (t=='radio'||t=='checkbox')&&true}
 				return _.each($vi(lc.name, 'value'), function(v){
 					return function(target, type){
-						// $log('1', target);
 						obj(target, vo);
 						Function('a', 'b', typeCheck(type) ? 
 							'_.isEmpty(b.'+target+')&&(b.'+target+'=[]), $(a).is(":checked")&&b.'+target+'.push($(a).val())':
@@ -127,6 +123,22 @@
 						Function('a','b','!_.isEmpty(b.'+target+')&&$(a).val(b.'+target+')')(v,o)
 					}($(v).data('bindValue'))
 				}),
+				_.each($vi(lc.name, 'attr'), function(v){
+					return function(target){
+						obj(target, o),
+						Function('a','b','!_.isEmpty(b.'+target+')&&$(a).attr(b.'+target+')')(v,o)
+					}($(v).data('bindAttr'))
+				}),
+				_.each($vi(lc.name, 'class'), function(v){
+					return function(target){
+						_.each(target.split(','), function(v1){
+							var t=v1.split(':');
+							t=t[1].replace(/'/g,'').split('==').concat(t[0]),
+							obj(t[0], o),
+							Function('a','b','c','!_.isEmpty(b.'+t[0]+')&& b.'+t[0]+'==c[1] ? $(a).addClass(c[2]) : $(a).removeClass(c[2])')(v,o,t)
+						});
+					}($(v).data('bindClass'))
+				}),
 				_.each($vi(lc.name, 'each'), function(v){
 					return function(target){
 						obj(target, o);
@@ -152,8 +164,13 @@
 						vo != undefined && (vo ? $(v).show() : $(v).hide())
 					}($(v).data('bindVisible'))
 				});
-
 				delete w.$index, delete w.$data;
+			},
+			event:function(){
+				return collee={}
+			},
+			focus:function(name){
+				$vi(lc.name).find('[data-bind-focus='+name+']')[0].focus()
 			}
 		};
 		function getTpl(url){

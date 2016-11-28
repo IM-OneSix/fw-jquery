@@ -10,8 +10,8 @@ $svc.view('event',function(param){
 		$log('param', p);
 	};
 	on.change=function(){
-		// var v=vo.pull();
-		// $log('param', v.sel);
+		var v=vo.pull();
+		$log('param', v.sel);
 	};
 });
 })()
