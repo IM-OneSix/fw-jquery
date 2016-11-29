@@ -2,7 +2,7 @@
 	var k = function(obj) {
 	if (obj instanceof k) return obj;
 	if (!(this instanceof k)) return new k(obj);
-		this._wrapped = obj;
+		this._svc = obj;
 	};
 	if (typeof exports !== 'undefined') {
 	if (typeof module !== 'undefined' && module.exports) {
@@ -148,7 +148,7 @@
 						_.each(data, function(v1,k1){
 							w.$index=k1, w.$data=v1, txt+=tmp(v1)
 						}),
-						$(v).html(txt))
+						$(v).html(txt), update())
 					}($(v).data('bindEach'))
 				}),
 				_.each($vi(lc.name, 'visible'), function(v){
@@ -187,7 +187,7 @@
 			});
 			function execute(e) {
 				var d=e.v && e.v.split(',');
-				return Function('$c', '$d', '$c.'+e.t.replace('(','.call('+(e.v ? '$d' : '$c') + (e.t.indexOf('()')<0 ? ',' : '')) + ';')
+				return Function('a', 'b', 'a.'+e.t.replace('(','.call('+(e.v ? 'b' : 'a') + (e.t.indexOf('()')<0 ? ',' : '')) + ';')
 				(collee, d && eachData[d[0]][d[1]])
 			}
 		}
@@ -210,9 +210,7 @@
 					return url ? 
 						$.ajax({
 							async:!sync,
-							// type: cache?'get':'post',
-							// contentType:'text/html',
-							type: 'get',
+							type: cache?'get':'post',
 							contentType:'text/html',
 							url:uri(url,cache),
 							success:d.resolve,
@@ -241,6 +239,26 @@
 						d.resolve(null),
 					d.promise()
 				}($.Deferred())
+			},
+			post:function(url,pm,sync){
+				return function(d){
+					return url ? 
+						$.ajax({
+							async:!sync,
+							type: 'post',
+							contentType:'application/json',
+							url:uri(url,cache),
+							data:JSON.stringify(pm),
+							success:function(data){
+								d.resolve({data:data||{},status:200})
+							},
+							error:function(r){
+								d.resolve({status:r.status==200?500:r.status,data:r.responseText})
+							}
+						}) :
+						d.resolve(null),
+					d.promise()
+				}($.Deferred())
 			}
 		}
 		function uri(p,c){return(c=!c?'?v='+_.now():''), p+c}
@@ -256,10 +274,16 @@
 
 				return callService.ajax().get(url,param).then(function(rs){
 					return dm.off(), rs.data
-					// $log('ajax', url, rs.data);
 				})
 			},
-			post:function(){}
+			post:function(url,param,loading){
+				loading=(loading==undefined?true:!!loading);
+				loading&&dm.on();
+
+				return callService.ajax().get(url,param).then(function(rs){
+					return dm.off(), rs.data
+				})
+			}
 		}
 	};
 	callService.view=function(){
