@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fw-jquery</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="../../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../common.css" rel="stylesheet">
+
+	<script src="../../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../../app/lib/underscore.js"></script>
+	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+
+	<script src="../../app/lib/jquery-svc.js"></script>
+	<script src="step.js"></script>
+</head>
+
+<body>
+	<div data-bind-include="layer/top.html"></div>
+
+	<!-- view-content -->
+	<div id="view-content" class="container">
+		<div data-bind-view="step">
+		<div class="page-header"><h3>스텝처리</h3></div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">text</h3></div>
+			<div class="panel-body">
+<pre>
+$svc.view('step',function($param, $remove){
+	// name: 뷰 이름, url: 템플릿 경로, append: 다중스텝
+
+	var vo=$svc.bind({name:'step', url:'', append:true});
+});
+</pre>
+				<p>
+					<div>에트리뷰트: <code>data-bind-text</code></div>
+					<hr/>
+					<button class="btn btn-default" data-bind-click="multi()">스텝추가</button>
+					<button class="btn btn-default" data-bind-click="single()">스텝이동</button>
+				</p>
+			</div>
+		</div>
+		</div>
+
+		<div data-bind-view="step01"></div>
+		<div data-bind-view="step02"></div>
+	</div>
+
+
+	<div data-bind-include="layer/footer.html"></div>
+</body>
+	
+</html>

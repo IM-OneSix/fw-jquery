@@ -59,7 +59,10 @@
 				$vi(lc.name).length < 1 && error('not found view element: '+lc.name),
 				$vi(lc.name).length > 1 && error('duplicate view element: '+lc.name),
 				getTpl(lc.url).then(function(rsTpl){
-					lc.url && rsTpl && $vi(lc.name).html(rsTpl);
+					lc.url && rsTpl && $vi(lc.name).html(rsTpl),
+					!lc.append && $('[data-bind-view]').hide(),
+					$vi(lc.name).show(),
+
 					_.each($vi(lc.name, 'each'), function(v){
 						_.each($(v).find('[data-bind-click]'), function(v1){
 							$(v1).attr('data-bind-item', $(v).data('bindEach')+',{{=$index}}')
@@ -171,6 +174,10 @@
 			},
 			focus:function(name){
 				$vi(lc.name).find('[data-bind-focus='+name+']')[0].focus()
+			},
+			remove:function(name){
+				$vi(lc.name).html(''),
+				!lc.append && $vi(name).show();
 			}
 		};
 		function getTpl(url){
@@ -290,8 +297,6 @@
 		return {
 			load:function(obj){
 				_.isFunction(callView[obj.name]) && callView[obj.name](obj.param);
-			},
-			remove:function(){
 			}
 		}
 	};
