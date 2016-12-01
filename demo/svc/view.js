@@ -10,9 +10,9 @@ $svc.view('view',function(param){
 			html:{out:'html: '},
 			lst:{
 				table:[
-					{c1:'a1', c2:'b1'},
-					{c1:'a2', c2:'b2'},
-					{c1:'a3', c2:'b3'}
+					{c1:'a1', c2:'b1', c3:['3','2','1']},
+					{c1:'a2', c2:'b2', c3:['a','b','c']},
+					{c1:'a3', c2:'b3', c3:['d','e','f']}
 				]
 			},
 			class:{tab:'a'}
@@ -31,8 +31,8 @@ $svc.view('view',function(param){
 			lst.push({c1:'a'+i, c2:'b'+i});
 		vo.push({lst:{table:lst}});
 	};
-	on.clickTable=function(p){
-		$log(p, this);
+	on.clickTable=function(p,e){
+		$log(p, this,e);
 	};
 	on.clickVisible=function(is, p){
 		$log(is);

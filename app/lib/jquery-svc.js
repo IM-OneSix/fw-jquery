@@ -49,6 +49,7 @@
 		return b=='I'?(m?['I',v,m]:['I',7,7]):[b,99,99];
 	}();
 
+	function $vi(n,t){return t?$('[data-bind-view='+n+'] [data-bind-'+t+']'):$('[data-bind-view='+n+']')}
 	callService.bind=function(cfg){
 		!_.isObject(cfg) && error('bind type error:: type is object'),
 		!cfg.name && error('undefined view element name');
@@ -60,7 +61,7 @@
 				$vi(lc.name).length > 1 && error('duplicate view element: '+lc.name),
 				getTpl(lc.url).then(function(rsTpl){
 					lc.url && rsTpl && $vi(lc.name).html(rsTpl),
-					!lc.append && $('[data-bind-view]').hide(),
+					// !lc.append && $('[data-bind-view]').hide(),
 					$vi(lc.name).show(),
 
 					_.each($vi(lc.name, 'each'), function(v){
@@ -69,6 +70,9 @@
 						}),
 						_.each($(v).find('[data-bind-change]'), function(v1){
 							$(v1).attr('data-bind-item', $(v).data('bindEach')+',{{=$index}}')
+						});
+						_.each($(v).find('[data-bind-each]'), function(v1){
+							$(v1).html('{{_.each('+$(v1).data('bindEach')+',function($v,$k){}}'+$(v1).html()+'{{})}}');
 						});
 						eachTemp[$(v).data('bindEach')] = _.template($(v).html());
 						$(v).html('');
@@ -149,7 +153,10 @@
 						data=Function('a', 'return a.'+target)(o);
 						!_.isEmpty(data) && ((eachData[target]=data),
 						_.each(data, function(v1,k1){
-							w.$index=k1, w.$data=v1, txt+=tmp(v1)
+							w.$index=k1,
+							w.$data=v1,
+							txt+=tmp(v1);
+							//$log(tmp.source)
 						}),
 						$(v).html(txt), update())
 					}($(v).data('bindEach'))
@@ -185,20 +192,19 @@
 		}
 		function update(){
 			$vi(lc.name, 'click').off('click').on('click', function(e){
-				return execute({n:lc.name, t:$(e.currentTarget).data('bindClick'), v:$(e.currentTarget).data('bindItem')}),
+				return execute({n:lc.name, t:$(e.currentTarget).data('bindClick'), v:$(e.currentTarget).data('bindItem'), e:e}),
 				!$(e.currentTarget).data('bindClick')
 			}),
 			$vi(lc.name, 'change').off('change').on('change', function(e){
-				return execute({n:lc.name, t:$(e.currentTarget).data('bindChange'), v:$(e.currentTarget).data('bindItem')}),
+				return execute({n:lc.name, t:$(e.currentTarget).data('bindChange'), v:$(e.currentTarget).data('bindItem'), e:e}),
 				!$(e.currentTarget).data('bindChange')
 			});
 			function execute(e) {
 				var d=e.v && e.v.split(',');
-				return Function('a', 'b', 'a.'+e.t.replace('(','.call('+(e.v ? 'b' : 'a') + (e.t.indexOf('()')<0 ? ',' : '')) + ';')
-				(collee, d && eachData[d[0]][d[1]])
+				return Function('a', 'b', 'c', 'a.'+e.t.replace('(','.call('+(e.v ? 'b' : 'a') + (e.t.indexOf('()')<0 ? ',' : '')).replace(')',',c)'))
+				(collee, d && eachData[d[0]][d[1]], e.e)
 			}
 		}
-		function $vi(n,t){return t?$('[data-bind-view='+n+'] [data-bind-'+t+']'):$('[data-bind-view='+n+']')}
 		function obj(t,v){
 			var a=v;
 			_.each(t.split('.'), function(b){
@@ -294,9 +300,16 @@
 		}
 	};
 	callService.view=function(){
+		var d=$.Deferred();
 		return {
 			load:function(obj){
-				_.isFunction(callView[obj.name]) && callView[obj.name](obj.param);
+				return obj.back && $('[data-bind-view]').hide(),
+				_.isFunction(callView[obj.name]) && callView[obj.name](obj.param, function(p){
+					$vi(obj.name).html(''),
+					obj.back ? $vi(obj.back).show() : p&&$vi(p).show(),
+					d.resolve()
+				}),
+				d.promise()
 			}
 		}
 	};
@@ -313,10 +326,14 @@
 		}
 		function create(c,k){
 			return o=c,
-			$('[data-bind-view='+o.name+']').length>0 && error('duplicate popup element: '+o.name),
+			$vi(o.name).length>0 && error('duplicate popup element: '+o.name),
 			$('#__flying_partition__').append('<div data-bind-view="'+o.name+'">'+makeHtml(k)+'</div>'),
 			dm.volume(),
-			callPopup[o.name](o.param, close),
+			callPopup[o.name](o.param, function(p){	// close
+				$('#__flying_partition__ [data-bind-view="'+o.name+'"]').remove(),
+				dm.volume(),
+				d.resolve(p)
+			}),
 			d.promise()
 		}
 		function makeHtml(k){
@@ -337,9 +354,6 @@
 					'</div>'+
 					'</div>'
 			}[k]||''
-		}
-		function close(p){
-			$('#__flying_partition__ [data-bind-view="'+o.name+'"]').remove(), dm.volume(), d.resolve(p)
 		}
 	};
 	callService.dimmed=function(){
@@ -391,15 +405,16 @@
 	function error(msg) {throw new Error(msg)}
 
 	$(document).ready(function(){
-		_.each($('[data-bind-include]'), function(v){
-			callService.ajax().html($(v).data('bindInclude'), true, false).then(function(rs){$(v).html(rs)})
-		}),
 		_.each(bootStrap.lib, function(v){
 			var h=document.getElementsByTagName('head')[0],e=document.createElement('script');
 			e.setAttribute('src',v), h.appendChild(e)
 		}),
+		_.each($('[data-bind-include]'), function(v){
+			callService.ajax().html($(v).data('bindInclude'), true, false).then(function(rs){$(v).html(rs)})
+		}),
 		$svc.get('view').load({name:bootStrap.name, param:Function('return '+$('[data-bind-param]').data('bindParam'))()}),
-		$('[data-bind-param]').remove()
+		$('[data-bind-param]').remove(),
+		setTimeout(function(){_.each(['bootstrap','service','view','popup'],function(v){delete k[v]})}, 200)
 	});
 
 	$svc.popup('lpAlert', function(param, $close){

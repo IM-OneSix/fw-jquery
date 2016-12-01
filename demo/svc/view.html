@@ -57,14 +57,18 @@ vo.push(v);
 			<div class="panel-body">
 				<p>
 					<div>에트리뷰트: <code>data-bind-each</code></div>
-					<div>값: $index, $data, {{= }} </div>
+					<div>값: $index, $data, 2depth($v,$k), {{= }}</div>
 					<hr/>
 					<a href="#" data-bind-click="clickEach()"><strong>확 인</strong></a>
 					<table class="table table-bordered">
 					<tbody data-bind-each="lst.table">
 						<tr>
 							<th>{{=$index+1}}</th>
-							<td>{{=$data['c1']}}</td>
+							<td>{{=$data['c1']}}
+								<select data-bind-each="$data.c3">
+									<option>{{=$v}}</option>
+								</select>
+							</td>
 							<td><a href="#" data-bind-click="clickTable({{=$index}})">{{=$data.c2}}</a></td>
 						</tr>
 					</tbody>

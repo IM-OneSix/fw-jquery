@@ -11,10 +11,12 @@ $svc.view('step',function($param, $remove){
 	});
 
 	on.multi=function(){
-		$svc.get('view').load({name:'step01'});
+		$svc.get('view').load({name:'step01'}).then(function(){
+			$log('prev view');
+		});
 	};
 	on.single=function(){
-		$svc.get('view').load({name:'step02'});
+		$svc.get('view').load({name:'step02', back:'step'});
 	};
 });
 
