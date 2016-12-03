@@ -13,13 +13,65 @@
 	<script src="../../app/lib/underscore.js"></script>
 	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
 
-	<script src="../../app/lib/jquery-svc-min.js"></script>
+	<script src="../../app/lib/jquery-svc.js"></script>
 	<script src="index.js"></script>
 </head>
 
 <body>
 	<div data-bind-param="{a:'1', b:'c'}"></div>
-	<div data-bind-include="layer/top.html"></div>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" onclick="showModal()">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Home</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">기본설명</a></li>
+					<li><a href="view.html">뷰</a></li>
+					<li><a href="popup.html">팝업</a></li>
+					<li><a href="plug.html">플러그인</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="list-group">
+						<a href="index.html" class="list-group-item">기본설명</a>
+						<a href="view.html" class="list-group-item">뷰</a>
+						<a href="popup.html" class="list-group-item">팝업</a>
+						<a href="plug.html" class="list-group-item">플러그인</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function showModal() {
+			$('#myModal').modal('show');
+		}
+
+		$('#myModal').on('hidden.bs.modal', function (e) {
+			// console.log(e);
+		});
+	</script>
+
+
 
 	<div id="view-content" class="container" data-bind-view="index">
 		<div class="page-header"><h3>기본설명</h3></div>
@@ -28,11 +80,6 @@
 		<div class="panel panel-default">
 			<div class="panel-heading"><h3 class="panel-title">로그, 얼럿, 컨펌</h3></div>
 			<div class="panel-body">
-				<p>
-					<button class="btn btn-default" data-bind-click="log()">로그</button>
-					<button class="btn btn-default" data-bind-click="alert()">얼럿</button>
-					<button class="btn btn-default" data-bind-click="confirm()">컨펌</button>
-				</p>
 <pre>
 <i>// 로그</i>
 $log('message');
@@ -42,85 +89,110 @@ $svc.get('popup').alert('message');
 $svc.get('popup').confirm('message').then(function(yn){
 });
 </pre>
-			</div>
-		</div>
-
-		<!-- 컨텐츠삽입 -->
-		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">컨텐츠삽입</h3></div>
-			<div class="panel-body">
 				<p>
-					에트리뷰트: <code>data-bind-include</code><br/>
-					값: 컨텐츠경로<br/>
+					<button class="btn btn-default" data-bind-click="log()">로그</button>
+					<button class="btn btn-default" data-bind-click="alert()">얼럿</button>
+					<button class="btn btn-default" data-bind-click="confirm()">컨펌</button>
 				</p>
 			</div>
 		</div>
 
-		<!-- 뷰 기본구조 -->
 		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">뷰 기본구조</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">출력 / 입력</h3></div>
 			<div class="panel-body">
-				<p>
-					에트리뷰트: <code>data-bind-view</code><br/>
-					값: 뷰이름
-				</p>
 <pre>
-<i>// 시작시 호출될 view, js를 등록</i>
-$svc.bootstrap('', []);
+<i>// 출력</i>
+vo.push({});
+<i>// 입력</i>
+var v=vo.pull();
+</pre>
+				<p>
+					<code>data-bind-text</code>,
+					<code>data-bind-html</code>,
+					<code>data-bind-visible</code>,
+					<code>data-bind-attr</code>,
+					<code>data-bind-class</code>,
+					<code>data-bind-value</code>,
+					<code>data-bind-each</code>
+					<hr/>
+					<a href="#" data-bind-click="push()"><strong>출력</strong></a>
+					<a href="#" data-bind-click="pull()"><strong>입력</strong></a>
+					<div class="form-inline">
+						text: <span data-bind-text="out.text"></span><br/>
+						html: <span data-bind-html="out.html"></span><br/>
+						<div class="form-group" data-bind-visible="out.show">
+							<label class="checkbox-inline"><input type="checkbox" value="1" data-bind-value="vl.chkeck"> 1</label>
+							<label class="checkbox-inline"><input type="checkbox" value="2" data-bind-value="vl.chkeck"> 2</label>
+							<label class="checkbox-inline"><input type="checkbox" value="3" data-bind-value="vl.chkeck"> 3</label>
+						</div>
+						<div class="form-group">
+							<label class="radio-inline"><input type="radio" value="a" data-bind-value="vl.radio"> a</label>
+							<label class="radio-inline"><input type="radio" value="b" data-bind-value="vl.radio"> b</label>
+							<label class="radio-inline"><input type="radio" value="c" data-bind-value="vl.radio"> c</label>
+						</div>
+						<div class="form-group row">
+							<div class="col-xs-9">
+							<input type="text" data-bind-value="vl.eidt" data-bind-attr="out.attr">
+							</div>
+							<div class="col-xs-3">
+							<button type="submit" class="btn btn-primary">확인</button>
+							</div>
+						</div>
+					<ul class="nav nav-tabs">
+						<li role="presentation" data-bind-class="active:out.tab=='a'"><a href="#" data-bind-click="tab('a')">Home</a></li>
+						<li role="presentation" data-bind-class="active:out.tab=='b'"><a href="#" data-bind-click="tab('b')">Profile</a></li>
+						<li role="presentation" data-bind-class="active:out.tab=='c'"><a href="#" data-bind-click="tab('c')">Messages</a></li>
+					</ul>
+					<div class="tab-content" style="margin-top:10px;">
+						<div class="tab-pane fade in active" role="tabpanel" aria-labelledby="home-tab" data-bind-class="active:out.tab=='a', in:out.tab=='a'">
+							<p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+						</div>
+						<div class="tab-pane fade" role="tabpanel" aria-labelledby="profile-tab" data-bind-class="active:out.tab=='b', in:out.tab=='b'">
+							<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+						</div>
+						<div class="tab-pane fade" role="tabpanel" aria-labelledby="dropdown1-tab" data-bind-class="active:out.tab=='c', in:out.tab=='c'">
+							<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+						</div>
+					</div>
 
-<i>// 뷰 구현</i>
-$svc.view('', functoin(param) {
-	<i>// 뷰바인딩</i>
-	var vo=$svc.bind({name:'',url:''});
-	<i>// 뷰이벤트핸들러</i>
-	var on=vo.event();
-	<i>// 뷰렌더링</i>
-	vo.render();
-});
 
-<i>// 뷰 호출</i>
-$svc.get('view').load({
-	name:'',
-	param:{},
-	single:true
-});
+						each: out-{{=}}, 1depth[$index, $data], 2depth[$v, $k]
+						<table class="table">
+						<tbody data-bind-each="out.list">
+							<tr>
+								<td>{{=$index+1}}</td>
+								<td>{{=$data.c1}}</td>
+								<td>{{=$data['c2']}}</td>
+								<td>
+									<select class="form-control" data-bind-each="$data.c3" data-bind-value="vl.sel{{=$index}}">
+										<option value="{{=$v.v}}">{{=$v.t}}</option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+				</p>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">포커스</h3></div>
+			<div class="panel-body">
+<pre>
+vo.focus('');
 </pre>
 			</div>
 		</div>
 
-		<!-- 팝업 기본구조 -->
-		<div class="panel panel-default">
-			<div class="panel-heading"><h3 class="panel-title">팝업 기본구조</h3></div>
-			<div class="panel-body">
-				<p>
-				</p>
-<pre>
-<i>// 팝업 구현</i>
-$svc.popup('', functoin(param,$close) {
-	<i>// 뷰바인딩</i>
-	var vo=$svc.bind({name:'',url:''});
-	<i>// 뷰이벤트핸들러</i>
-	var on=vo.event();
-	<i>// 뷰렌더링</i>
-	vo.render();
-	<i>// 팝업닫음</i>
-	on.close=function(){
-		$close();
-	};
-});
-
-<i>// 팝업 호출</i>
-$svc.get('popup').open({
-	name:'',
-	param:{}
-});
-</pre>
-			</div>
-		</div>
 
 	</div>
 
-	<div data-bind-include="layer/footer.html"></div>
+	<footer id="view-bottom" class="bs-docs-footer label-danger">
+		<div class="container">
+			레이아웃 하단영역
+		</div>
+	</footer>
 </body>
 	
 </html>

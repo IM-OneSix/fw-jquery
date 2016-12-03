@@ -1,40 +1,50 @@
 !function(n){
   function t(n){throw new Error(n)}
-  var e=function(n){
-    return n instanceof e?n:this instanceof e?void(this._svc=n):new e(n)
-  };
-  "undefined"!=typeof exports?("undefined"!=typeof module&&module.exports&&(exports=module.exports=e),exports.$svc=e):n.$svc=e,
-  _.templateSettings={evaluate:/\{\{(.+?)\}\}/g,interpolate:/\{\{=(.+?)\}\}/g,escape:/\{\{-(.+?)\}\}/g};
-
-  var a={},i={},r={},o={};
-  e.debug=!0,
-  e.bootstrap=function(n,t){n&&(o={name:n,lib:t})},
-  e.get=function(n){return a[n]()},
-  e.bind=function(n){return a.bind(n)},
-  e.service=function(n,e){a[n]&&t("duplicate service name: "+n),a[n]=e},
-  e.view=function(n,e){i[n]&&t("duplicate view name: "+n),i[n]=e},
-  e.popup=function(n,e){r[n]&&t("duplicate view name: "+n),r[n]=e},
-  e.browser=function(){var n=document.documentMode,t=navigator.userAgent,e=_.find({"Chrome/":"C","Safari/":"S","Firefox/":"F",OPR:"O",Opera:"O","Trident/":"I",MSIE:"I"},function(n,e){return t.indexOf(e)>-1})||"N",a=_.find({"Trident/4.0":8,"Trident/5.0":9,"Trident/6.0":10,"Trident/7.0":11},function(n,e){return t.indexOf(e)>-1})||7;return"I"==e?n?["I",a,n]:["I",7,7]:[e,99,99]}(),
-  a.bind=function(e){
-    function i(n){
-      return n?a.ajax().html(n,!1,!1):function(n){return n.resolve(null),n.promise()}($.Deferred())
-    }
-    function r(){
+  function e(){
+    $("#__flying_partition__ [data-party-dimmed]").remove(),
+    $("#__flying_partition__ >div:last")
+    .before('<div data-party-dimmed style="position:fixed;top:0;left:0;width:100%;height:100%;background-color:#333;opacity:.5;"></div>')
+  }
+  function a(n,t,e){
+    return e?
+    $("[data-"+n+"-view="+t+"] [data-"+n+"-"+e+"]"):
+    $("[data-"+n+"-view="+t+"]")
+  }
+  function i(n){
+    return n?
+    u.http().html(n):
+    function(n){
+      return n.resolve(null),
+      n.promise()
+    }($.Deferred())
+  }
+  function r(e,r){
+    function o(){
       function n(n){
         var t=n.v&&n.v.split(",");
-        return Function("a","b","a."+n.t.replace("(",".call("+(n.v?"b":"a")+(n.t.indexOf("()")<0?",":""))+";")(d,t&&l[t[0]][t[1]])
+        return Function(
+          "a","b","c",
+          "a."+n.t.replace("(",".call("+(n.v?"b":"a")+(n.t.indexOf("()")<0?",":"")).replace(")",",c)")
+        )(d,t&&f[t[0]][t[1]],n.e)
       }
-      o(c.name,"click").off("click").on("click",function(t){
-        return n({n:c.name,t:$(t.currentTarget).data("bindClick"),v:$(t.currentTarget).data("bindItem")}),
-        !$(t.currentTarget).data("bindClick")
+      a(e,c.name,"click").off("click").on("click",function(t){
+        return n({
+          n:c.name,
+          t:$(t.currentTarget).data(e+"Click"),
+          v:$(t.currentTarget).data(e+"Item"),
+          e:t
+        }),
+        !$(t.currentTarget).data(e+"Click")
       }),
-      o(c.name,"change").off("change").on("change",function(t){
-        return n({n:c.name,t:$(t.currentTarget).data("bindChange"),v:$(t.currentTarget).data("bindItem")}),
-        !$(t.currentTarget).data("bindChange")
+      a(e,c.name,"change").off("change").on("change",function(t){
+        return n({
+          n:c.name,
+          t:$(t.currentTarget).data(e+"Change"),
+          v:$(t.currentTarget).data(e+"Item"),
+          e:t
+        }),
+        !$(t.currentTarget).data(e+"Change")
       })
-    }
-    function o(n,t){
-      return t?$("[data-bind-view="+n+"] [data-bind-"+t+"]"):$("[data-bind-view="+n+"]")
     }
     function u(n,t){
       var e=t;
@@ -46,129 +56,177 @@
         })
       })
     }
-    !_.isObject(e)&&t("bind type error:: type is object"),
-    !e.name&&t("undefined view element name");
-    var c=_.clone(e),d={},s={},l={};
+    !_.isObject(r)&&t("bind type error:: type is object"),
+    !r.name&&t("undefined view element name:: "+e);
+    var c=_.clone(r),d={},s={},f={};
     return{
       render:function(n){
-        o(c.name).length<1&&t("not found view element: "+c.name),
-        o(c.name).length>1&&t("duplicate view element: "+c.name),
+        a(e,c.name).length<1&&t("not found view element:: "+e+":: "+c.name),
+        a(e,c.name).length>1&&t("duplicate view element:: "+e+":: "+c.name),
         i(c.url).then(function(t){
-          c.url&&t&&o(c.name).html(t),
-          _.each(o(c.name,"each"),function(n){
-            _.each($(n).find("[data-bind-click]"),function(t){
-              $(t).attr("data-bind-item",$(n).data("bindEach")+",{{=$index}}")
+          c.url&&t&&a(e,c.name).html(t),
+          c.plugin&&a(e,c.name).html(c.plugin),
+          a(e,c.name).show(),
+          _.each(a(e,c.name,"each"),function(n){
+            _.each($(n).find("[data-"+e+"-click]"),function(t){
+              $(t).attr("data-"+e+"-item",$(n).data(e+"Each")+",{{=$index}}")
             }),
-            _.each($(n).find("[data-bind-change]"),function(t){
-              $(t).attr("data-bind-item",$(n).data("bindEach")+",{{=$index}}")
+            _.each($(n).find("[data-"+e+"-change]"),function(t){
+              $(t).attr("data-"+e+"-item",$(n).data(e+"Each")+",{{=$index}}")
             }),
-            s[$(n).data("bindEach")]=_.template($(n).html()),
+            _.each($(n).find("[data-"+e+"-each]"),function(n){
+              $(n).html("{{_.each("+$(n).data(e+"Each")+",function($v,$k){}}"+$(n).html()+"{{})}}")
+            }),
+            s[$(n).data(e+"Each")]=_.template($(n).html()),
             $(n).html("")
           }),
-          _.each(o(c.name,"visible"),function(n){
+          _.each(a(e,c.name,"visible"),function(n){
             $(n).hide()
           }),
-          _.isFunction(n)&&n(),r()
+          _.isFunction(n)&&n(),
+          o()
         })
       },
       pull:function(n){
         function t(n){
           return("radio"==n||"checkbox"==n)&&!0
         }
-        var e={},a="";
-        return _.each(o(c.name,"value"),function(i){
-          return function(r,d){
-            u(r,e),
+        var i={};
+        return _.each(a(e,c.name,"value"),function(n){
+          return function(e,a){
+            u(e,i),
             Function("a","b",
-              t(d)?"_.isEmpty(b."+r+")&&(b."+r+'=[]), $(a).is(":checked")&&b.'+r+".push($(a).val())":"b."+r+"=$(a).val()"
-            )(i,e),
-            n&&(t(d)?o(c.name).find('[data-bind-value="'+r+'"]:checked').length<=0&&!a&&(a=r):!$(i).val()&&!a&&(a=r))
-          }($(i).data("bindValue"),
-          $(i).attr("type"))
+              t(a)?"_.isEmpty(b."+e+")&&(b."+e+'=[]), $(a).is(":checked")&&b.'+e+".push($(a).val())":"b."+e+"=$(a).val()"
+            )(n,i)
+          }($(n).data(e+"Value"),$(n).attr("type"))
         }),
-        function(){
-          var t=n&&Function("a","return a."+a)(n);
-          return n&&a?(t&&$svc.get("popup").alert(t).then(function(){
-            o(c.name).find('[data-bind-value="'+a+'"]')[0].focus()
-          }),null):e
-        }()
+        i
       },
       push:function(t){
-        _.isObject(t)&&(
-        n.$index=0,n.$data={},
-        _.each(o(c.name,"text"),function(n){
-          return function(e){
-            u(e,t),
-            Function("a","b","!_.isEmpty(b."+e+")&&$(a).text(b."+e+")")(n,t)
-          }($(n).data("bindText"))
-        }),
-        _.each(o(c.name,"html"),function(n){
-          return function(e){
-            u(e,t),
-            Function("a","b","!_.isEmpty(b."+e+")&&$(a).html(b."+e+")")(n,t)
-          }($(n).data("bindHtml"))
-        }),
-        _.each(o(c.name,"value"),function(n){
-          return function(e){
-            u(e,t),
-            Function("a","b","!_.isEmpty(b."+e+")&&$(a).val(b."+e+")")(n,t)
-          }($(n).data("bindValue"))
-        }),
-        _.each(o(c.name,"attr"),function(n){
-          return function(e){
-            u(e,t),
-            Function("a","b","!_.isEmpty(b."+e+")&&$(a).attr(b."+e+")")(n,t)
-          }($(n).data("bindAttr"))
-        }),
-        _.each(o(c.name,"class"),function(n){
-          return function(e){
-            _.each(e.split(","),function(e){
-              var a=e.split(":");
-              a=a[1].replace(/'/g,"").split("==").concat(a[0]),
-              u(a[0],t),
-              Function("a","b","c","!_.isEmpty(b."+a[0]+")&& b."+a[0]+"==c[1] ? $(a).addClass(c[2]) : $(a).removeClass(c[2])")(n,t,a)
-            })
-          }($(n).data("bindClass"))
-        }),
-        _.each(o(c.name,"each"),function(e){
-          return function(a){
-            u(a,t);
-            var i="",r=s[a],
-            o=Function("a","return a."+a)(t);
-            !_.isEmpty(o)&&(
-            l[a]=o,
-            _.each(o,function(t,e){
-              n.$index=e,n.$data=t,i+=r(t)
-            }),
-            $(e).html(i),r())
-          }($(e).data("bindEach"))
-        }),
-        _.each(o(c.name,"visible"),function(n){
-          return function(e){
-            var a=function(){
-              return e.indexOf("==")<0?
-              (u(e,t),Function("a","return _.isBoolean(a."+e+")?a."+e+":undefined")(t)):
-              function(n){
-                return u(n[0],t),
-                Function("a","b","return _.isObject(a."+n[0]+")&&_.isEmpty(a."+n[0]+")?undefined:a."+n[0]+"==b")
-                (t,n[1].replace(/'/g,""))
-              }(e.split("=="))
-            }();
-            void 0!=a&&(a?$(n).show():$(n).hide())
-          }($(n).data("bindVisible"))
-        }),
-        delete n.$index,delete n.$data)
+        if(_.isObject(t)){
+          var t=_.clone(t);
+          n.$index=0,n.$data={},
+          _.each(a(e,c.name,"each"),function(a){
+            return function(e){
+              u(e,t);
+              var i="",r=s[e],
+              o=Function("a","return a."+e)(t);
+              !_.isEmpty(o)&&(f[e]=o,_.each(o,function(t,e){n.$index=e,n.$data=t,i+=r(t)}),$(a).html(i))
+            }($(a).data(e+"Each"))
+          }),
+          _.each(a(e,c.name,"text"),function(n){
+            return function(e){
+              u(e,t),
+              Function("a","b","!_.isEmpty(b."+e+")&&$(a).text(b."+e+")")(n,t)
+            }($(n).data(e+"Text"))
+          }),
+          _.each(a(e,c.name,"html"),function(n){
+            return function(e){
+              u(e,t),
+              Function("a","b","!_.isEmpty(b."+e+")&&$(a).html(b."+e+")")(n,t)
+            }($(n).data(e+"Html"))
+          }),
+          _.each(a(e,c.name,"value"),function(n){
+            return function(e){
+              u(e,t),
+              Function("a","b","!_.isEmpty(b."+e+")&&$(a).val(b."+e+")")(n,t)
+            }($(n).data(e+"Value"))
+          }),
+          _.each(a(e,c.name,"attr"),function(n){
+            return function(e){
+              u(e,t),
+              Function("a","b","!_.isEmpty(b."+e+")&&$(a).attr(b."+e+")")(n,t)
+            }($(n).data(e+"Attr"))
+          }),
+          _.each(a(e,c.name,"class"),function(n){
+            return function(e){
+              _.each(e.split(","),function(e){
+                var a=e.split(":");
+                a=a[1].replace(/'/g,"").split("==").concat(a[0]),
+                u(a[0],t),
+                Function("a","b","c",
+                  "!_.isEmpty(b."+a[0]+")&& b."+a[0]+"==c[1] ? $(a).addClass(c[2]) : $(a).removeClass(c[2])"
+                )(n,t,a)
+              })
+            }($(n).data(e+"Class"))
+          }),
+          _.each(a(e,c.name,"visible"),function(n){
+            return function(e){
+              var a=function(){
+                return e.indexOf("==")<0?
+                (u(e,t),Function("a","return _.isBoolean(a."+e+")?a."+e+":undefined")(t)):
+                function(n){
+                  return u(n[0],t),
+                  Function("a","b",
+                    "return _.isObject(a."+n[0]+")&&_.isEmpty(a."+n[0]+")?undefined:a."+n[0]+"==b"
+                  )(t,n[1].replace(/'/g,""))
+                }(e.split("=="))
+              }();
+              void 0!=a&&(a?$(n).show():$(n).hide())
+            }($(n).data(e+"Visible"))
+          }),
+          delete n.$index,delete n.$data,o()
+        }
       },
-      event:function(){return d={}},
+      event:function(){
+        return d={}
+      },
       focus:function(n){
-        o(c.name).find("[data-bind-focus="+n+"]")[0].focus()
+        a(e,c.name).find("[data-"+e+"-focus="+n+"]")[0].focus()
       }
     }
+  }
+  var o=function(n){
+    return n instanceof o?n:this instanceof o?void(this._svc=n):new o(n)
+  };
+  "undefined"!=typeof exports?
+  ("undefined"!=typeof module&&module.exports&&(exports=module.exports=o),exports.$svc=o):
+  n.$svc=o,
+  _.templateSettings={evaluate:/\{\{(.+?)\}\}/g,interpolate:/\{\{=(.+?)\}\}/g,escape:/\{\{-(.+?)\}\}/g};
+  var u={},c={},d={},s={},f={},l=0;
+  o.debug=!0,
+  o.bootstrap=function(n,t){
+    n&&(f={name:n,lib:t})
   },
-  a.ajax=function(){
+  o.init=function(n){
+    $(document).ready(n)
+  },
+  o.get=function(n){
+    return u[n]()
+  },
+  o.bind=function(n){
+    return r(n.plugin?"plugin":"bind",n)
+  },
+  o.service=function(n,e){
+    u[n]&&t("duplicate service name: "+n),
+    u[n]=e
+  },
+  o.view=function(n,e){
+    c[n]&&t("duplicate view name: "+n),
+    c[n]=e
+  },
+  o.plugin=function(n,e){
+    d[n]&&t("duplicate plugin name: "+n),
+    d[n]=e
+  },
+  o.popup=function(n,e){
+    s[n]&&t("duplicate view name: "+n),
+    s[n]=e
+  },
+  o.browser=function(){
+    var n=document.documentMode,
+    t=navigator.userAgent,
+    e=_.find({"Chrome/":"C","Safari/":"S","Firefox/":"F",OPR:"O",Opera:"O","Trident/":"I",MSIE:"I"},function(n,e){
+      return t.indexOf(e)>-1
+    })||"N",
+    a=_.find({"Trident/4.0":8,"Trident/5.0":9,"Trident/6.0":10,"Trident/7.0":11},function(n,e){
+      return t.indexOf(e)>-1
+    })||7;
+    return"I"==e?n?["I",a,n]:["I",7,7]:[e,99,99]
+  }(),
+  u.ajax=function(){
     function n(n,t){
-      return t=t?"":"?v="+_.now(),
-      n+t
+      return t=t?"":"?v="+_.now(),n+t
     }
     function t(n){
       return _.map(n,function(n,t){
@@ -178,96 +236,142 @@
     return{
       html:function(t,e,a){
         return function(i){
-          return t?
-          $.ajax({
-            async:!e,type:a?"get":"post",contentType:"text/html",url:n(t,a),
-            success:i.resolve,
-            error:function(){i.resolve(null)}
-          }):
-          i.resolve(null),
+          return t?$.ajax({
+            async:!e,type:a?"get":"post",contentType:"text/html",
+            url:n(t,a),
+            success:function(n){i.resolve(n)},
+            error:function(){i.resolve()}
+          }):i.resolve(),
           i.promise()
         }($.Deferred())
       },
       get:function(e,a,i,r){
         return function(o){
           return e?$.ajax({
-            async:!i,type:"get",contentType:"application/json",url:n(e,r),data:t(a),
-            success:function(n){
-              o.resolve({data:n||{},status:200})
-            },
-            error:function(n){
-              o.resolve({status:200==n.status?500:n.status,data:n.responseText})
-            }
-          }):
-          o.resolve(null),
+            async:!i,type:"get",contentType:"application/json",
+            url:n(e,r),
+            data:t(a),
+            success:function(n){o.resolve({data:n||{},status:200})},
+            error:function(n){o.resolve({status:200==n.status?500:n.status,data:n.responseText})}
+          }):o.resolve(),
           o.promise()
         }($.Deferred())
-      },post:function(t,e,a){
+      },
+      post:function(t,e,a){
         return function(i){
           return t?$.ajax({
-            async:!a,type:"post",contentType:"application/json",url:n(t,cache),data:JSON.stringify(e),
-            success:function(n){
-              i.resolve({data:n||{},status:200})
-            },
-            error:function(n){
-              i.resolve({status:200==n.status?500:n.status,data:n.responseText})
-            }
-          }):
-          i.resolve(null),
+            async:!a,type:"post",contentType:"application/json",
+            url:n(t,cache),
+            data:JSON.stringify(e),
+            success:function(n){i.resolve({data:n||{},status:200})},
+            error:function(n){i.resolve({status:200==n.status?500:n.status,data:n.responseText})}
+          }):i.resolve(),
           i.promise()
+        }($.Deferred())
+      },
+      form:function(e,a,i){
+        return function(r){
+          return e?$.ajax({
+            async:!i,type:"post",
+            contentType:"application/x-www-form-urlencoded;charset=utf-8",
+            url:n(e,cache),
+            data:t(a),
+            success:function(n){r.resolve({data:n||{},status:200})},
+            error:function(n){r.resolve({status:200==n.status?500:n.status})}
+          }):r.resolve(),
+          r.promise()
         }($.Deferred())
       }
     }
   },
-  a.http=function(){
-    var n=a.dimmed();
-    return{
-      http:function(){},
-      get:function(t,e,i){
-        return i=void 0==i?!0:!!i,
-        i&&n.on(),
-        a.ajax().get(t,e).then(function(t){
-          return n.off(),t.data
+  u.http=function(){
+    function t(n){
+      setTimeout(function(){
+        l++<1&&i(!0),e(),n&&"on"==n&&l++
+      },1)
+    }
+    function a(n){
+      setTimeout(function(){
+        n&&"off"==n&&--l,--l<1&&(l=0,i(),e())
+      },1)
+    }
+    function i(t){
+      return $("#__flying_partition__ [data-party-message]").remove(),
+      t&&($("#__flying_partition__").append('<div data-party-message style="position:absolute;top:30%;font-size:2em;color:#fff;"><div class="spinner"></div></div>'),
+        $("#__flying_partition__ [data-party-message]").css("left",($(n).width()-$("#__flying_partition__ [data-party-message]").width())/2))
+    }
+    return $("#__flying_partition__").length<1&&$("body").append('<div id="__flying_partition__"></div>'),
+    {
+      html:function(n){
+        return t(),
+        u.ajax().html(n,!1,!1).then(function(n){
+          return a(),n||""
         })
       },
-      post:function(t,e,i){
-        return i=void 0==i?!0:!!i,
-        i&&n.on(),
-        a.ajax().get(t,e).then(function(t){
-          return n.off(),t.data
-        })
+      get:function(n,e,i){
+        return function(r){
+          return t(i),
+          u.ajax().get(n,e).then(function(n){
+            return a(i),
+            200!=n.status?void r.reject():void r.resolve(n.data)
+          }),
+          r.promise()
+        }($.Deferred())
+      },
+      post:function(n,t,e){
+        return function(i){
+          u.ajax().get(n,t).then(function(n){
+            return a(e),
+            200!=n.status?void i.reject():void i.resolve(n.data)
+          })
+        }($.Deferred())
       }
     }
   },
-  a.view=function(){
+  u.view=function(){
+    var n=$.Deferred();
     return{
-      load:function(n){
-        _.isFunction(i[n.name])&&i[n.name](n.param)
-      },
-      remove:function(){}
+      load:function(e){
+        return!c[e.name]&&t("undefined view name: "+e.name),
+        !e.append&&$("[data-bind-view]").hide(),
+        _.isFunction(c[e.name])&&c[e.name](e.param,function(t){
+          a("bind",e.name).html(""),
+          t&&a("bind",t).show(),
+          n.resolve()
+        }),
+        n.promise()
+      }
     }
   },
-  a.popup=function(){
-    function n(n,a){
-      return u=n,
-      $("[data-bind-view="+u.name+"]").length>0&&t("duplicate popup element: "+u.name),
-      $("#__flying_partition__").append('<div data-bind-view="'+u.name+'">'+e(a)+"</div>"),
-      o.volume(),
-      r[u.name](u.param,i),
-      c.promise()
+  u.plugin=function(){
+    return{
+      load:function(n,e){
+        return !d[n.name]&&t("undefined plug name: "+n.name),
+        _.isFunction(d[n.name])&&d[n.name](n.param,e)
+      }
     }
-    function e(n){
+  },
+  u.popup=function(){
+    function n(n,u){
+      return r=n,
+      a("bind",r.name).length>0&&t("duplicate popup element: "+r.name),
+      $("#__flying_partition__").append('<div data-bind-view="'+r.name+'">'+i(u)+"</div>"),
+      e(),
+      s[r.name](r.param,function(n){
+        $('#__flying_partition__ [data-bind-view="'+r.name+'"]').remove(),
+        e(),
+        o.resolve(n)
+      }),
+      o.promise()
+    }
+    function i(n){
       return{
         alert:'<div class="alert alert-warning" style="position:absolute;top:10%;left:10%;width:80%;"><div data-bind-html="message"></div><div style="margin-top:20px;text-align:center;"><button class="btn btn-default btn-sm" data-bind-click="ok()">확인</button></div></div>',
         confirm:'<div class="alert alert-warning" style="position:absolute;top:10%;left:10%;width:80%;"><div data-bind-html="message"></div><div style="margin-top:20px;text-align:center;"><button class="btn btn-primary btn-sm" data-bind-click="yes()">확인</button><i style="margin-left:10px;"></i><button class="btn btn-default btn-sm" data-bind-click="no()">취소</button></div></div>'
       }[n]||""
     }
-    function i(n){
-      $('#__flying_partition__ [data-bind-view="'+u.name+'"]').remove(),
-      o.volume(),
-      c.resolve(n)
-    }
-    var o=a.dimmed(),u={},c=$.Deferred();
+    $("#__flying_partition__").length<1&&$("body").append('<div id="__flying_partition__"></div>');
+    var r={},o=$.Deferred();
     return{
       open:n,
       alert:function(t){
@@ -278,50 +382,29 @@
       }
     }
   },
-  a.dimmed=function(){
-    function t(){
-      $("#__flying_partition__ [data-party-dimmed]").remove(),
-      $("#__flying_partition__ >div:last").before('<div data-party-dimmed style="position:fixed;top:0;left:0;width:100%;height:100%;background-color:#333;opacity:.5;"></div>')
-    }
-    function e(t){
-      return $("#__flying_partition__ [data-party-message]").remove(),
-      t&&($("#__flying_partition__").append('<div data-party-message style="position:absolute;top:30%;font-size:2em;color:#fff;"><div class="spinner"></div></div>'),
-        $("#__flying_partition__ [data-party-message]").css("left",($(n).width()-$("#__flying_partition__ [data-party-message]").width())/2))
-    }
-    var a=0;
-    return $("#__flying_partition__").length<1&&$("body").append('<div id="__flying_partition__"></div>'),{
-      on:function(){
-        a++<1&&setTimeout(function(){e(!0),t()},1)
-      },
-      off:function(){
-        --a<1&&setTimeout(function(){a=0,e(!1),t()},1)
-      },
-      clear:function(){
-        setTimeout(function(){a=0,e(!1),t()},1)
-      },
-      volume:t
-    }
-  },
   n.$log=function(){
-    e.debug&&("I"==e.browser[0]?console.log(JSON.stringify(_.toArray(arguments))):console.log.apply(console,_.toArray(arguments)))
+    o.debug&&("I"==o.browser[0]?
+    console.log(JSON.stringify(_.toArray(arguments))):
+    console.log.apply(console,_.toArray(arguments)))
   },
   $(document).ready(function(){
-    _.each($("[data-bind-include]"),function(n){
-      a.ajax().html($(n).data("bindInclude"),!0,!1).then(function(t){
-        $(n).html(t)
-      })
-    }),
-    _.each(o.lib,function(n){
+    $("body").hide(),
+    _.each(f.lib,function(n){
       var t=document.getElementsByTagName("head")[0],
       e=document.createElement("script");
-      e.setAttribute("src",n),
-      t.appendChild(e)
+      e.setAttribute("src",n),t.appendChild(e)
     }),
     $svc.get("view").load({
-      name:o.name,
+      name:f.name,
       param:Function("return "+$("[data-bind-param]").data("bindParam"))()
     }),
-    $("[data-bind-param]").remove()
+    $("[data-bind-param]").remove(),
+    $("body").show(),
+    setTimeout(function(){
+      _.each(["bootstrap","service","view","popup","plugin"],function(n){
+        delete o[n]
+      })
+    },200)
   }),
   $svc.popup("lpAlert",function(n,t){
     var e=$svc.bind({name:"lpAlert"});

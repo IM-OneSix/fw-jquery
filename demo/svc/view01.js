@@ -1,12 +1,13 @@
 (function(){
-$svc.view('step02',function($param,$close){
-	var vo=$svc.bind({name:'step02', url:'step02.html'});
+$svc.view('view01',function($param,$close){
+	var vo=$svc.bind({name:'view01', url:'view01.html'});
 	var on=vo.event();
 	vo.render(function(){
+		$log('view01 init', $param);
 	});
 
 	on.prev=function(){
-		$close();
+		$close('view');
 	};
 	on.next=function(){
 		$svc.get('popup').alert('다음처리');
