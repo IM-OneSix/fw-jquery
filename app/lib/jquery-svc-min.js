@@ -404,7 +404,7 @@
       _.each(["bootstrap","service","view","popup","plugin"],function(n){
         delete o[n]
       })
-    },200)
+    },1000)
   }),
   $svc.popup("lpAlert",function(n,t){
     var e=$svc.bind({name:"lpAlert"});
