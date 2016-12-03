@@ -237,7 +237,7 @@
       html:function(t,e,a){
         return function(i){
           return t?$.ajax({
-            async:!e,type:a?"get":"post",contentType:"text/html",
+            async:!e,type:"get",contentType:"text/html",
             url:n(t,a),
             success:function(n){i.resolve(n)},
             error:function(){i.resolve()}
