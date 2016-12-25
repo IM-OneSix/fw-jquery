@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>발주</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="../../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../../app/lib/underscore-min.js"></script>
+	<script src="../../app/lib/jquery-svc.js"></script>
+	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+	<link href="../../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+	<link href="common.css" rel="stylesheet">
+	<script src="shell.js"></script>
+	<script src="index.js"></script>
+</head>
+
+<body>
+	<!-- view-top -->
+	<div id="viewTop" data-bind-include="viewTop"></div>
+
+	<!-- view-content -->
+	<div id="viewContent" class="container" data-bind-view="index">
+		<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">인기상품</h3></div>
+			<div class="panel-body mainlink">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<a href="#" class="thumbnail">
+							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/a2b0437320119d96b2fe49dde4b27816.jpg">
+							<div class="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<a href="#" class="thumbnail">
+							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/b067985730afe2981501cb087c3ac954.jpg">
+							<div class="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-info">
+			<div class="panel-heading"><h3 class="panel-title">신규상품</h3></div>
+			<div class="panel-body mainlink">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<a href="#" class="thumbnail">
+							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/a2b0437320119d96b2fe49dde4b27816.jpg">
+							<div class="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-xs-12 col-sm-3">
+						<a href="#" class="thumbnail">
+							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/b067985730afe2981501cb087c3ac954.jpg">
+							<div class="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-xs-12 col-sm-3">
+						<a href="#" class="thumbnail">
+							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/b067985730afe2981501cb087c3ac954.jpg">
+							<div class="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- view-bottom -->
+	<footer id="viewFooter" class="bs-docs-footer label-danger" data-bind-include="viewFooter"></footer>
+</body>
+	
+</html>

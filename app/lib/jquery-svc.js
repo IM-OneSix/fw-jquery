@@ -38,7 +38,7 @@
 				$vi(type, lc.name).length > 1 && error('duplicate view element:: '+type+':: '+lc.name),
 				getTpl(lc.url).then(function(rsTpl){
 					lc.url && rsTpl && $vi(type, lc.name).html(rsTpl),
-					lc.plugin && $vi(type, lc.name).html(lc.plugin),
+					lc.tpl && $vi(type, lc.name).html(lc.tpl),
 					$vi(type, lc.name).show(),
 
 					_.each($vi(type, lc.name, 'each'), function(v){
@@ -438,10 +438,13 @@
 			var h=document.getElementsByTagName('head')[0],e=document.createElement('script');
 			e.setAttribute('src',v), h.appendChild(e)
 		});
+		_.each($('[data-bind-include]'), function(v){
+			$(v).attr('data-plugin-view', $(v).data('bindInclude'));
+			$svc.get('plugin').load({name:$(v).data('bindInclude')});
+		});
 		$svc.get('view').load({name:bootStrap.name, param:Function('return '+$('[data-bind-param]').data('bindParam'))()});
 		$('[data-bind-param]').remove();
 		$('body').show();
-		setTimeout(function(){_.each(['bootstrap','service','view','popup'],function(v){delete k[v]})}, 200);
 	});
 	$svc.popup('lpAlert', function(param, $close){
 		var vo=$svc.bind({name:'lpAlert'})
