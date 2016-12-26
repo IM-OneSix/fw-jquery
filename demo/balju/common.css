@@ -6,7 +6,7 @@ body {padding-top:60px}
 #viewContent {min-height:600px;}
 .mainlink a {text-decoration:none;}
 .goodsList a {text-decoration:none;}
-.goodsList .image {max-height:100px;overflow:hidden;}
+.goodsList .image {max-height:90px;overflow:hidden;}
 .goodsList .image img {width:100%;}
 .goodsList .subject {height:40px;overflow:hidden;}
 .goodsList .price {text-align:right;}
