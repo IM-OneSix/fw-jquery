@@ -14,7 +14,7 @@
 
 	<link href="../common.css?v=1" rel="stylesheet">
 	<script src="../shell.js"></script>
-	<script src="list.js"></script>
+	<script src="view.js"></script>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
 	<div id="viewTop" data-bind-include="viewTop"></div>
 
 	<!-- view-content -->
-	<div id="viewContent" class="container" data-bind-view="list">
+	<div id="viewContent" class="container" data-bind-view="view">
 		<div class="page-header">
 			<h3 class="dropdown">
 				<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">패션/잡화</a>
@@ -34,44 +34,39 @@
 			</h3>
 		</div>
 
-		<div class="panel panel-primary">
-			<div class="panel-heading"><h3 class="panel-title">Best</h3></div>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title">Thumbnail label</h3></div>
 			<div class="panel-body mainlink">
 				<div class="row">
-					<div class="col-xs-12 col-sm-6">
-						<a href="view.html" class="thumbnail">
+					<div class="col-xs-6 col-sm-6">
+						<div class="thumbnail">
 							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/a2b0437320119d96b2fe49dde4b27816.jpg">
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-							</div>
-						</a>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<a href="#" class="thumbnail">
-							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/a2b0437320119d96b2fe49dde4b27816.jpg">
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-							</div>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row goodsList" data-bind-each="list">
-			<div class="col-xs-6 col-sm-4">
-				<a href="#" class="thumbnail">
-					<div class="image">{{=$data.img}}</div>
-					<div class="caption">
-						<p class="subject">{{=$data.subject}}</p>
-						<div class="price">
-							<div><s>{{=$data.price1}} 원</s></div>
-							<div><b>{{=$data.price2}} 원</b></div>
 						</div>
 					</div>
-				</a>
+					<div class="col-xs-6 col-sm-6">
+						<table class="table table-condensed">
+						<colgroup>
+							<col width="40%"/>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th class="text-center">소비자가</th>
+								<td class="text-right">20,000 원</td>
+							</tr>
+							<tr>
+								<th class="text-center">판매가</th>
+								<td class="text-right">10,000 원</td>
+							</tr>
+							<tr>
+								<td colspan="2"><button class="btn btn-info" style="width:100%;">상품상세</button></td>
+							</tr>
+							<tr>
+								<td colspan="2"><button class="btn btn-warning" style="width:100%;">주 문</button></td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -84,6 +79,7 @@
 			<button class="btn btn-primary" style="width:100%;">더보기</button>
 			</div>
 		</div>
+
 	</div>
 
 	<!-- view-bottom -->
