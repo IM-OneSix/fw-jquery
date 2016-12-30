@@ -27,24 +27,10 @@
 			<div class="panel-heading"><h3 class="panel-title">인기상품</h3></div>
 			<div class="panel-body mainlink">
 				<div class="row">
-					<div class="col-xs-12 col-sm-6">
-						<a href="#" class="thumbnail">
-							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/a2b0437320119d96b2fe49dde4b27816.jpg">
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-							</div>
-						</a>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<a href="#" class="thumbnail">
-							<img src="http://www.matcl.com/files/attach/images/2791205/267/834/002/b067985730afe2981501cb087c3ac954.jpg">
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-							</div>
-						</a>
-					</div>
+					<input type="text" data-bind-observe="a01"/><br/>
+					<div data-bind-lamp="a01">aaaaa</div>
+					<input type="checkbox" value="1" data-bind-observe="a02"/><br/>
+					<div data-bind-lamp="a01,a02">bbbb</div>
 				</div>
 			</div>
 		</div>

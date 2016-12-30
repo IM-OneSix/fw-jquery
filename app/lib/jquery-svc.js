@@ -30,7 +30,7 @@
 	function core(type,cfg){
 		!_.isObject(cfg) && error('bind type error:: type is object'),
 		!cfg.name && error('undefined view element name:: '+type);
-		var lc=_.clone(cfg), collee={}, eachTemp={}, eachData={};
+		var lc=_.clone(cfg), collee={}, eachTemp={}, eachData={}, observer={}/* 옵져버블 */, lamp={};
 
 		return {
 			render:function(func){
@@ -58,7 +58,7 @@
 						$(v).hide()
 					}),
 					_.isFunction(func)&&func(),
-					update()
+					setTimeout(function(){update()},100)
 				});
 			},
 			pull:function(o){
@@ -146,9 +146,55 @@
 			},
 			focus:function(name){
 				$vi(type, lc.name).find('[data-'+type+'-focus='+name+']')[0].focus()
+			},
+			observe:function(name, func){
+				name&&_.isFunction(func)&&(observer[name]=func, lamp[name]=false);
+				// observer=o;
+				// update();
 			}
 		};
 		function update(){
+			function checkLamp(){
+				_.each($vi(type, lc.name, 'lamp'), function(v,k){
+					$log($(v).data(type+'Lamp'), lamp);
+					var check=[];
+					!function(t) {
+						t.indexOf(',')>0 ? _.each(t.split(','), function(v){
+							check.push(lamp[v])
+						}):check.push(lamp[t]);
+
+						$log('ck', check);
+						_.every(check) ? $(v).show() : $(v).hide();
+					}($(v).data(type+'Lamp'))
+					// var dt = $(v).data(type+'Lamp');
+					// _.each($(v).data(type+'Lamp').split(','), function(v){
+					// 	$log('split', v);
+					// });
+
+					// var keys = _.filter(lamp, function(v,k){
+					// 	$log('-1-', dt, '['+k+']', dt.indexOf('['+k+']'));
+					// 	return dt.indexOf('['+k+']')>-1;
+					// });
+					// $log('keys', keys, _.every(keys));
+					// _.every(keys) ? $(v).show() : $(v).hide();
+				});
+			}
+			_.each($vi(type, lc.name, 'observe'), function(v){
+				!function(t,d){
+					$log('-', t,d,observer);
+
+					d&&(
+						// t=='text'?
+						$(v).off('keyup').on('keyup', function(e){
+							observer[d]&&(lamp[d]=observer[d](e.currentTarget.value)), checkLamp();
+							return false;
+						})
+						// }):''
+					);
+				}($(v).attr('type'), $(v).data(type+'Observe'))
+			});
+			checkLamp();
+
 			$vi(type, lc.name, 'click').off('click').on('click', function(e){
 				return execute({n:lc.name, t:$(e.currentTarget).data(type+'Click'), v:$(e.currentTarget).data(type+'Item'), e:e}),
 				!$(e.currentTarget).data(type+'Click')
