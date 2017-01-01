@@ -147,55 +147,52 @@
 			focus:function(name){
 				$vi(type, lc.name).find('[data-'+type+'-focus='+name+']')[0].focus()
 			},
-			observe:function(name, func){
+			watch:function(name, func){
 				name&&_.isFunction(func)&&(observer[name]=func, lamp[name]=false);
-				// observer=o;
-				// update();
 			}
 		};
 		function update(){
-			function checkLamp(){
+			function checkLamp(valid){
 				_.each($vi(type, lc.name, 'lamp'), function(v,k){
-					$log($(v).data(type+'Lamp'), lamp);
 					var check=[];
 					!function(t) {
-						t.indexOf(',')>0 ? _.each(t.split(','), function(v){
-							check.push(lamp[v])
-						}):check.push(lamp[t]);
-
-						$log('ck', check);
-						_.every(check) ? $(v).show() : $(v).hide();
+						(t.indexOf('&&')>0 ?
+						_.each(t.split('&&'), function(v){check.push(lamp[v])}) :
+						t.indexOf('||')>0 ? _.each(t.split('||'),function(v){lamp[v]&&check.push(true)}) : check.push(lamp[t])),
+						check.length>0&&_.every(check, function(v){return v==true}) ? $(v).show() : $(v).hide();
 					}($(v).data(type+'Lamp'))
-					// var dt = $(v).data(type+'Lamp');
-					// _.each($(v).data(type+'Lamp').split(','), function(v){
-					// 	$log('split', v);
-					// });
-
-					// var keys = _.filter(lamp, function(v,k){
-					// 	$log('-1-', dt, '['+k+']', dt.indexOf('['+k+']'));
-					// 	return dt.indexOf('['+k+']')>-1;
-					// });
-					// $log('keys', keys, _.every(keys));
-					// _.every(keys) ? $(v).show() : $(v).hide();
 				});
+				if(valid){
+					_.every(lamp, function(v){return v==undefined})?
+					$vi(type, lc.name, 'valid').removeClass('btn-default').addClass(valid):
+					$vi(type, lc.name, 'valid').removeClass(valid).addClass('btn-default');
+				}
 			}
-			_.each($vi(type, lc.name, 'observe'), function(v){
+			_.each($vi(type, lc.name, 'watch'), function(v){
 				!function(t,d){
-					$log('-', t,d,observer);
-
 					d&&(
-						// t=='text'?
-						$(v).off('keyup').on('keyup', function(e){
-							observer[d]&&(lamp[d]=observer[d](e.currentTarget.value)), checkLamp();
-							return false;
+						t=='text'?
+						$(v).off('keyup.watch').on('keyup.watch', function(e){
+							observer[d]&&(lamp[d]=observer[d](e.currentTarget.value)), checkLamp('btn-primary')
+						}):
+						$(v).off('change.watch').on('change.watch', function(e){
+							var vl=[];
+							t ?
+							_.each($('[data-'+type+'-watch='+d+']'), function(v){
+								$(v).prop('checked') && vl.push($(v).val())
+							}) :
+							(vl=$(v).val());
+							observer[d]&&(lamp[d]=observer[d](vl)), checkLamp('btn-primary');
 						})
-						// }):''
 					);
-				}($(v).attr('type'), $(v).data(type+'Observe'))
+				}($(v).attr('type'), $(v).data(type+'Watch'))
 			});
 			checkLamp();
 
 			$vi(type, lc.name, 'click').off('click').on('click', function(e){
+				if($(e.currentTarget).data(type+'Valid')==true && !_.every(lamp,function(v){return v==undefined})){
+					return;
+				}
 				return execute({n:lc.name, t:$(e.currentTarget).data(type+'Click'), v:$(e.currentTarget).data(type+'Item'), e:e}),
 				!$(e.currentTarget).data(type+'Click')
 			}),
