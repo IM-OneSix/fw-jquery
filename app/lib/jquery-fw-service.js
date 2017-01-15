@@ -1,6 +1,106 @@
 (function(w) {
 
 // ==============================
+window.open('https://twitter.com/intent/tweet?text=[%EA%B3%B5%EC%9C%A0]%20'
++encodeURIComponent(document.URL)+'%20-%20'+encodeURIComponent(document.title), 'twittersharedialog',
+ 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+window.open('https://www.facebook.com/sharer/sharer.php?u='
++encodeURIComponent(document.URL)+'&t='+encodeURIComponent(document.title), 'facebooksharedialog',
+ 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+window.open('https://plus.google.com/share?url='+encodeURIComponent(document.URL), 'googleplussharedialog','menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=600');
+window.open('https://story.kakao.com/s/share?url='+encodeURIComponent(document.URL), 'kakaostorysharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
+window.open('http://share.naver.com/web/shareView.nhn?url='
++encodeURIComponent(document.URL)+'&title='+encodeURIComponent(document.title),
+ 'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+
+  var firstImg=$(".imageblock:first-of-type img");
+    var contents="";
+    if(firstImg.attr("src")){
+        var firstImgSrc=firstImg.attr("src");
+        var firstImgRatio = parseInt(firstImg.css("height"))/parseInt(firstImg.css("width"));
+        if (firstImgRatio <=0.27) var firstImgRatio=0.27;
+    }else{var firstImgSrc=location.origin+"/favicon.ico";var firstImgRatio=1}
+  
+    Kakao.init('카카오톡 API');
+
+    function sendLink() {
+      Kakao.Link.sendTalkLink({
+        label: '[##_page_title_##]',
+         image: {
+        src: firstImgSrc,
+        width: '300',
+        height: parseInt(300*firstImgRatio)
+      }
+        ,
+      webButton: {
+        text: '블로그에서 이어보기',
+         url : document.URL
+      }
+      });
+    } 
+/*
+// Share on Twitter
+<a href="#" onclick="javascript:window.open('https://twitter.com/intent/tweet?text=[%EA%B3%B5%EC%9C%A0]%20'
++encodeURIComponent(document.URL)+'%20-%20'+encodeURIComponent(document.title), 'twittersharedialog',
+ 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank"
+alt="Share on Twitter" ><img src="./images/Twitter.png"></a>
+
+// Share on Facebook
+<a href="#" onclick="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u='
++encodeURIComponent(document.URL)+'&t='+encodeURIComponent(document.title), 'facebooksharedialog',
+ 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank"
+ alt="Share on Facebook" >
+<img src="./images/Facebook.png"></a>
+        
+// Share on Google+
+<a href="#" onclick="javascript:window.open('https://plus.google.com/share?url='+encodeURIComponent(document.URL), 'googleplussharedialog','menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=600');return false;" target="_blank" alt="Share on Google+">
+<img src="./images/Google_Plus.png"></a>
+
+// Share on Kakaostory
+<a href="#" onclick="javascript:window.open('https://story.kakao.com/s/share?url='+encodeURIComponent(document.URL), 'kakaostorysharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');return false;" target="_blank" alt="Share on kakaostory">
+<img src="./images/Kakao_Story.png"></a>
+
+// Share on Naver
+<a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url='
++encodeURIComponent(document.URL)+'&title='+encodeURIComponent(document.title),
+ 'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" 
+ target="_blank" alt="Share on Naver" >
+<img src="./images/Naver.png"></a>
+
+// Share on KakaoTalk
+<a href="javascript:sendLink()"><img src="./images/Kakao.png"></a>
+
+<script>
+  var firstImg=$(".imageblock:first-of-type img");
+    var contents="";
+    if(firstImg.attr("src")){
+        var firstImgSrc=firstImg.attr("src");
+        var firstImgRatio = parseInt(firstImg.css("height"))/parseInt(firstImg.css("width"));
+        if (firstImgRatio <=0.27) var firstImgRatio=0.27;
+    }else{var firstImgSrc=location.origin+"/favicon.ico";var firstImgRatio=1}
+  
+    Kakao.init('카카오톡 API');
+
+    function sendLink() {
+      Kakao.Link.sendTalkLink({
+        label: '[##_page_title_##]',
+         image: {
+        src: firstImgSrc,
+        width: '300',
+        height: parseInt(300*firstImgRatio)
+      }
+        ,
+      webButton: {
+        text: '블로그에서 이어보기',
+         url : document.URL
+      }
+      });
+    } 
+</script> 
+*/
+// ==============================
+
+
 function uri(p,c){return(c=!c?'?v='+v():''),fw.A.root+p+c}
 
 si.provider('ajax',function(){

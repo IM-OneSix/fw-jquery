@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>발주</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="../../app/lib/jquery-1.12.4.min.js"></script>
+	<script src="../../app/lib/underscore-min.js"></script>
+	<script src="../../app/lib/jquery-svc.js"></script>
+	<script src="../../app/lib/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+	<link href="../../app/lib/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+	<link href="common.css?v=1" rel="stylesheet">
+	<script src="shell.js"></script>
+	<script src="goods-list.js"></script>
+</head>
+
+<body>
+	<!-- view-top -->
+	<div id="viewTop" data-bind-include="viewTop"></div>
+
+	<!-- view-content -->
+	<div id="viewContent" class="container" data-bind-view="list">
+		<div class="page-header">
+			<h3>상품조회</h3>
+		</div>
+		<h3 class="dropdown">
+			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">카테고리<span class="caret"></span></button>
+
+			<ul class="dropdown-menu">
+				<li><a href="#">패션,잡화</a></li>
+				<li><a href="#">가전</a></li>
+			</ul>
+			<small>패션,잡화</small>
+		</h3>
+
+		<div class="row goodsList" data-bind-each="list">
+			<div class="col-xs-6 col-sm-4">
+				<a href="#" class="thumbnail" data-bind-click="view()">
+					<div class="image">{{=$data.img}}</div>
+					<div class="caption">
+						<p class="subject">{{=$data.subject}}</p>
+						<div class="price">
+							<div><s>{{=$data.price1}} 원</s></div>
+							<div><b>{{=$data.price2}} 원</b></div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-8">
+			<button class="btn btn-info">판매순</button>
+			<button class="btn btn-default">가격순</button>
+			<button class="btn btn-default">조회순</button>
+			</div>
+			<div class="col-xs-4">
+			<button class="btn btn-primary" style="width:100%;">더보기</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- view-bottom -->
+	<footer id="viewFooter" class="bs-docs-footer label-danger" data-bind-include="viewFooter"></footer>
+</body>
+	
+</html>
